@@ -14,6 +14,8 @@ import UploadImage from "./experiment/uploadImage";
 import Credential from "./Pages/Credentials";
 import { PushNotification } from "./experiment/pushnotification";
 import ListProduct from "./Pages/ListProduct";
+import Register from "./Pages/Store/Register";
+import Seller from "./Pages/Store";
 
 function App() {
   return (
@@ -32,6 +34,12 @@ function App() {
           </Route>
           <Route path="/cart">
             <Cart />
+          </Route>
+          <Route path="/open-shop">
+            <Register />
+          </Route>
+          <Route path="/seller">
+            <Seller />
           </Route>
           <Route path="/experiment-image-upload">
             <UploadImage />

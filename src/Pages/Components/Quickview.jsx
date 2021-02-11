@@ -88,12 +88,17 @@ const Quickview = () => {
   }, []);
 
   useEffect(() => {
+    var overlay_popup = document.getElementsByClassName("overlay-popup");
     if(QReducer.open === true) {
       document.getElementsByTagName("html")[0].style.overflowY = "hidden";
-      document.getElementById("homepage").classList.add("popup-open");
-    } else if(document.getElementById("homepage") && QReducer.open === false) {
+      for (let i = 0; i < overlay_popup.length; i++) {
+        document.getElementsByClassName("overlay-popup")[i].classList.add("popup-open");
+      }
+    } else if(overlay_popup.length && QReducer.open === false) {
       document.getElementsByTagName("html")[0].style.overflowY = "scroll";
-      document.getElementById("homepage").classList.remove("popup-open");
+      for (let i = 0; i < overlay_popup.length; i++) {
+        document.getElementsByClassName("overlay-popup")[i].classList.remove("popup-open");
+      }
     }
   }, [QReducer.open]);
 

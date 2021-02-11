@@ -35,8 +35,7 @@ const Login = ({ onBack, toSignup }) => {
           console.log('response Login', response);
           cookies.set('user_token', response.data.data.token.token);
           cookies.set('login', true);
-          // window.location.reload();
-          const token = await response.data.data.token.token;
+          const token = response.data.data.token.token;
           getUser(token);
         } catch(e) {
           if(e.response) {
@@ -71,12 +70,12 @@ const Login = ({ onBack, toSignup }) => {
   const getUser = async (token) => {
     const url = `${config.api_host}/api/user-detail`;
     try {
-      const response = await Axios.get(url, {headers: {'Authorization': token}});
-      console.log('response user', response);
+      const response = await Axios.get(url, {headers: {'Authorization': `Bearer `.concat(token)}});
+      window.location.reload();
+      cookies.set('user', response.data.user);
     } catch(e) {
-      console.error(e);
+      console.error('user detail error: ', e.message);
     }
-    // cookies.set('user', )
   }
 
   return (

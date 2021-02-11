@@ -74,8 +74,7 @@ const Header = () => {
           <div className="content-header">
             <div className="rest-content-item">
               {smallBanner.map((image, i) =>
-                <div className="small-banner-wrapper" key={i} style={{ backgroundImage: `url(${config.api_host}/api/image/${image.image.id})` }}>
-                </div>
+                <div className="small-banner-wrapper" key={i} style={{ backgroundImage: `url(${config.api_host}/api/image/${image.image.id})` }}></div>
               )}
             </div>
             <Slider {...settings} className="content3-item">

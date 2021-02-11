@@ -2,10 +2,12 @@ import React, { Fragment, useEffect, useRef, useState } from "react";
 import { Link, NavLink, Redirect, useHistory } from "react-router-dom";
 import Avatar from "../assets/images/about.jpg";
 import Logo from "../assets/images/Logo.svg";
+import SignoutIco from "../assets/images/icons/signout.jpg";
 import Cookies from "universal-cookie";
 import { useDispatch } from "react-redux";
 import { config } from "../config";
 import Axios from "axios";
+import Swal from "sweetalert2";
 const cookies = new Cookies();
 
 const Navbar = () => {
@@ -15,15 +17,55 @@ const Navbar = () => {
   const [clicked, setClicked] = useState(false);
   const [search, setSearch] = useState([]);
   const [display, setDisplay] = useState(false);
+  const [menu, setMenu] = useState(false);
+  const [store, setStore] = useState();
   const [options, setOptions] = useState([]);
   const login = cookies.get("login");
   const cart = cookies.get("cart");
   const searchRef = useRef(null);
   let history = useHistory();
-
+  
   const loginPopup = (truep) => {
     dispatch({ type: "CREDENTIAL_POPUP", open: truep });
   };
+
+  const checkUserStore = async (token, unmounted) => {
+    const url = `${config.api_host}/api/check-store`;
+    const header = {'Authorization': `Bearer ${cookies.get('user_token')}`}
+
+    try {
+      const response = await Axios.get(url, {headers: header});
+      if (!unmounted) {
+        setStore(response.data.message);
+      }
+    } catch (e) {
+      if (!unmounted) {
+        console.error(e.message);
+        if(Axios.isCancel(e)) {
+          console.log(`request cancelled: ${e.message}`);
+        } else {
+          console.log('Another error happened:' + e.message);
+        }
+      }
+    }
+  }
+
+  const logout = async () => {
+    const url = `${config.api_host}/api/logout`;
+    const header = {'Authorization': `Bearer ${cookies.get('user_token')}`}
+
+    try {
+      const response = await Axios.get(url, {headers: header});
+      cookies.remove('user');
+      cookies.remove('user_token');
+      cookies.remove('login');
+      history.push('/');
+      window.location.reload();
+    } catch (e) {
+      console.error(e.message);
+      Swal.fire({icon: 'error', title: 'Oops...', text: e.message});
+    }
+  }
 
   const keyDown = e => {
     e.preventDefault();
@@ -73,6 +115,19 @@ const Navbar = () => {
   }
 
   useEffect(() => {
+    let unmounted = false;
+    let source = Axios.CancelToken.source();
+    if (cookies.get('user_token') !== null) {
+      checkUserStore(source.token, unmounted);
+    }
+
+    return () => {
+      unmounted = true;
+      source.cancel('Cancelling in cleanup');
+    }
+  }, []);
+  
+  useEffect(() => {
     if (cart !== undefined) {
       setTotal(cart.length);
     }
@@ -88,7 +143,7 @@ const Navbar = () => {
 
   return (
     <Fragment>
-      {console.log('options', options)}
+      {console.log('store', store)}
       <nav>
         <div className="container">
           <div className="nav-wrapper">
@@ -123,9 +178,31 @@ const Navbar = () => {
                   <div className="wishlist">
                     <i className="bi bi-heart-fill"></i>
                   </div>
-                  <div className="account">
-                    <img src={Avatar} alt="profile" />
-                  </div>
+                  <button className="account">
+                    <div className={menu ? "menu" : "menu hide"}>
+                      <div className="user-banner">
+                        <div className="user-img-round"><img src={`${config.api_host}/api/image/${cookies.get('user').image.id}`} alt="user"/></div>
+                        <div className="user-greeting">
+                          <span className="greeting">{cookies.get('user').username}</span>
+                          <span className="email-user">{cookies.get('user').email}</span>
+                        </div>
+                      </div>
+                      <div className="menu-action">
+                        <div className="user-store">
+                          {store ? <button><Link to="/seller/dashboard">Seller Dashboard</Link></button> : <button><Link to="open-shop">Open Shop</Link></button>}
+                        </div>
+                        <div className="more">
+                          <Link to="history">Purchase History</Link>
+                          <Link to="wishlist">Wishlist</Link>
+                          <Link to="settings">Settings</Link>
+                          <div className="signout" onClick={logout}>Sign out <img src={SignoutIco} alt="ico"/></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="account-img" onClick={() => setMenu(!menu)} >
+                      <img src={`${config.api_host}/api/image/${cookies.get('user').image.id}`} alt="profile" />
+                    </div>
+                  </button>
                 </Fragment>
               )}
             </div>

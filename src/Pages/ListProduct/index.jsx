@@ -12,10 +12,11 @@ const ListProduct = () => {
   const [condition, setCondition] = useState('');
   const [filter, setFilter] = useState({});
   const [checked, setChecked] = useState([]);
+  const [price, setPrice] = useState([]);
 
   const getProducts = (token, unmounted) => {
+    var url = `${config.api_host}/api/search/products`;
     if (type !== '') {
-      const url = `${config.api_host}/api/search/products`;
       let body = {sort_by: type};
       Axios.post(url, body, {cancelToken: token})
       .then(response => {
@@ -33,9 +34,17 @@ const ListProduct = () => {
           }
         }
       });
-    } if (filter !== '') {
-      const url = `${config.api_host}/api/search/products`;
-      let body = {condition};
+    } if (filter.length > 0) {
+      let body = {};
+      if (condition !== '') {
+        body = {...body, condition}
+      }
+      if (categories.length > 0) {
+        body = {...body, categories}
+      }
+      if (price.length > 0) {
+        body = {...body, price}
+      }
       console.log('masuk sini');
       Axios.post(url, body, {cancelToken: token})
       .then(response => {
@@ -104,10 +113,25 @@ const ListProduct = () => {
       setChecked([...checked, itemInt]);
     }
   }
-
+  
   const checkHandler = e => {
     const value = e.target.value;
     categoryHandle(value);
+  }
+
+  const limitPrice = event => {
+    if (event.target.value > 0) {
+      let value = event.target.value;
+      var name = event.target.id;
+      setPrice({...price, min: value});
+      if (name = 'min') {
+        if (price.includes('min')) {
+          console.log('masuk ops ini');
+        }
+      } else {
+        setPrice({...price, max: value});
+      }
+    }
   }
 
   useEffect(() => {
@@ -134,7 +158,7 @@ const ListProduct = () => {
 
   return (
     <Fragment>
-      {console.log('checked', checked)}
+      {console.log('price', price)}
       <div className="overlay-popup">
         <section className="products-sect">
           <div className="container">
@@ -171,7 +195,7 @@ const ListProduct = () => {
                       {categories.slice(1, 6).map((category, i) => 
                         <li key={i}>
                           <div className="type-checkbox">
-                            <input type="checkbox" value={category.id} onClick={e => checkHandler(e)} id={`${category.name}-box`} />
+                            <input type="checkbox" value={category.id} onClick={e => {checkHandler(e)}} id={`${category.name}-box`} />
                             <label htmlFor={`${category.name}-box`}>
                               <span className="checkmark"></span>
                             </label>
@@ -195,6 +219,10 @@ const ListProduct = () => {
                         </ul>
                       </li>
                     </ul>
+                  </div>
+                  <div className="limit-price">
+                    <input type="number" id="min" onChange={e => limitPrice(e)} placeholder="min" />
+                    <input type="number" id="max" onChange={e => limitPrice(e)} placeholder="max" />
                   </div>
                 </div>
                 {products.map((product, i) => 
