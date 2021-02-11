@@ -39,7 +39,7 @@ const Login = ({ onBack, toSignup }) => {
           getUser(token);
         } catch(e) {
           if(e.response) {
-            Swal.fire({icon: 'error', title: `${e.response.data}`});
+            Swal.fire({icon: 'error', title: "oops...", text: `${e.message}`});
           } else {
             Swal.fire({icon: 'error', title: `An error occured`});
           }

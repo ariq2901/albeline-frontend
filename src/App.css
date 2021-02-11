@@ -1555,6 +1555,7 @@ svg.yellow {
 .quickview-description {
   margin-top: 8%;
   padding-right: 5%;
+  white-space: pre-wrap;
 }
 
 .quickview-description p {
@@ -1776,6 +1777,7 @@ section.detail-sect {
   width: 100%;
   font-family: "Roboto-Regular";
   color: var(--hover-name-color);
+  white-space: pre-wrap;
 }
 
 .reveal {
@@ -3588,4 +3590,8 @@ button.next-form-btn {
 .pre {
   white-space: pre-wrap;
   /* word-wrap: break-word; */
+}
+
+div.img-form {
+  margin-bottom: 0;
 }
