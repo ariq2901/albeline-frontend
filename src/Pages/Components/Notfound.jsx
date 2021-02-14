@@ -14,7 +14,7 @@ const NotFound = () => {
               <div className="notfound-text">
                 <div className="notfound-title">
                   <h1>Ooops.</h1>
-                  <h2>Relax, take it easy. <br/>Keep fresh your mind!</h2>
+                  <h2>Relax, take it easy. <br/> Keep fresh your mind!</h2>
                 </div>
                 <div className="notfound-desc">
                   <span>You find our error page 404. this is not your fault. it is just a little bit mistakes. But don't worry, you can still explore our site when you go back to main page.</span>
