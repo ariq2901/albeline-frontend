@@ -13,6 +13,8 @@ import Toy from '../../assets/images/icons/toy.png';
 import { CustomArrow } from '../Components/SliderCustomized';
 import { config } from '../../config';
 import Axios from 'axios';
+import ImageLoad from '../Components/ImageLoad';
+import Placeholder from '../../assets/images/placeholder.jpg';
 
 const Header = () => {
   const [bigBanner, setBigBanner] = useState([]);
@@ -80,7 +82,7 @@ const Header = () => {
             <Slider {...settings} className="content3-item">
               {bigBanner.map((image, i) =>
                 <div key={i} className="big-banner-wrapper">
-                  <img src={`${config.api_host}/api/image/${image.image.id}`} alt="banner"/>
+                  <ImageLoad placeholder={Placeholder} src={`${config.api_host}/api/image/${image.image.id}`} alt="banner"/>
                 </div>
               )}
             </Slider>

@@ -4,25 +4,28 @@ import Avatar from "../assets/images/about.jpg";
 import Logo from "../assets/images/Logo.svg";
 import SignoutIco from "../assets/images/icons/signout.jpg";
 import Cookies from "universal-cookie";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { config } from "../config";
 import Axios from "axios";
 import Swal from "sweetalert2";
 const cookies = new Cookies();
 
 const Navbar = () => {
+  const CartReducer = useSelector(state => state.CartReducer);
+  const RegisterShop = useSelector(state => state.RegisterShop);
   const dispatch = useDispatch();
   const [input, setInput] = useState(false);
   const [total, setTotal] = useState(0);
   const [clicked, setClicked] = useState(false);
   const [search, setSearch] = useState([]);
+  const [cart, setCart] = useState([]);
   const [display, setDisplay] = useState(false);
   const [menu, setMenu] = useState(false);
   const [store, setStore] = useState();
   const [options, setOptions] = useState([]);
   const login = cookies.get("login");
-  const cart = cookies.get("cart");
   const searchRef = useRef(null);
+  const node = useRef();
   let history = useHistory();
   
   const loginPopup = (truep) => {
@@ -31,8 +34,8 @@ const Navbar = () => {
 
   const checkUserStore = async (token, unmounted) => {
     const url = `${config.api_host}/api/check-store`;
-    const header = {'Authorization': `Bearer ${cookies.get('user_token')}`}
-
+    const header = {'Authorization': config.bearer_token}
+    
     try {
       const response = await Axios.get(url, {headers: header});
       if (!unmounted) {
@@ -45,6 +48,28 @@ const Navbar = () => {
           console.log(`request cancelled: ${e.message}`);
         } else {
           console.log('Another error happened:' + e.message);
+        }
+      }
+    }
+  }
+  
+  const handleCart = async (token, unmounted) => {
+    const url = `${config.api_host}/api/get-cart`;
+    const auth = {'Authorization': config.bearer_token}
+    console.log('masuk sini');
+    try {
+      const response = await Axios.get(url, {headers: auth, cancelToken: token});
+      if (!unmounted) {
+        setTotal(response.data.data.products.length);
+        console.log('response cart navbar', response);
+      }
+    } catch (e) {
+      if (!unmounted) {
+        console.error(e.message);
+        if (Axios.isCancel(e)) {
+          console.log(`request cancelled: ${e.message}`);
+        } else {
+          console.error('Another error happened: ' + e.message);
         }
       }
     }
@@ -89,6 +114,14 @@ const Navbar = () => {
     
   // }
 
+  const handleMenu = event => {
+    if (node.current.contains(event.target)) {
+      return;
+    }
+
+    setMenu(false);
+  }
+
   const handleClick = event => {
     const {current: wrap} = searchRef;
 
@@ -125,25 +158,34 @@ const Navbar = () => {
       unmounted = true;
       source.cancel('Cancelling in cleanup');
     }
-  }, []);
-  
+  }, [RegisterShop.registered]);
+
   useEffect(() => {
-    if (cart !== undefined) {
-      setTotal(cart.length);
+    let unmounted = false;
+    let source = Axios.CancelToken.source();
+    handleCart(source.token, unmounted);
+
+    return () => {
+      unmounted = true;
+      source.cancel('Cancelling in cleanup');
     }
-  }, [cart]);
+  }, [CartReducer.render]);
 
   useEffect(() => {
     document.addEventListener('mousedown', handleClick);
-
+    if (login) {
+      document.addEventListener('mousedown', handleMenu);
+    }
+    
     return () => {
       document.removeEventListener('mousedown', handleClick);
+      document.removeEventListener('mousedown', handleMenu);
     }
   }, []);
 
   return (
     <Fragment>
-      {console.log('store', store)}
+      {console.log('CartReducer.render', CartReducer.render)}
       <nav>
         <div className="container">
           <div className="nav-wrapper">
@@ -171,7 +213,7 @@ const Navbar = () => {
                 <Fragment>
                   <NavLink className="cart" to="/cart">
                     {total > 0 ? (
-                      <div className="badge-cart">{total}</div>
+                      <div className="badge-cart"><span>{total}</span></div>
                     ) : null}
                     <i className="bi bi-cart2"></i>
                   </NavLink>
@@ -179,7 +221,7 @@ const Navbar = () => {
                     <i className="bi bi-heart-fill"></i>
                   </div>
                   <button className="account">
-                    <div className={menu ? "menu" : "menu hide"}>
+                    <div ref={node} className={menu ? "menu" : "menu hide"}>
                       <div className="user-banner">
                         <div className="user-img-round"><img src={`${config.api_host}/api/image/${cookies.get('user').image.id}`} alt="user"/></div>
                         <div className="user-greeting">

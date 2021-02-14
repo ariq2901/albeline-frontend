@@ -1,5 +1,7 @@
 import Axios from 'axios';
 import React, { Fragment, useEffect, useRef, useState } from 'react'
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import Select from "react-select";
 import Swal from 'sweetalert2';
 import Cookie from 'universal-cookie';
@@ -13,6 +15,8 @@ export const Register = () => {
   const [city_id, setCity_id] = useState([]);
   const [addressSelection, setAddressSelection] = useState([]);
   const node = useRef();
+  let history = useHistory();
+  const dispatch = useDispatch();
 
   const getCity = async (token) => {
     // own Proxy Server
@@ -88,7 +92,8 @@ export const Register = () => {
     console.log('body', body);
     try {
       const response = await Axios.post(url, body, {headers: header});
-      Swal.fire({icon: 'success', title: 'your shop has been created', text: 'Let\'s fill up your store with your products!'});
+      dispatch({type: "REGISTER_SHOP", registered: true});
+      Swal.fire({icon: 'success', title: 'your shop has been created', text: 'Let\'s fill up your store with your products!'}).then(() => {history.push('/seller/dashboard')});
     } catch(e) {
       Swal.fire({icon: 'error', title: 'Oops...', text: 'An error Occured'});
       console.error('Failure created a store: ', e);
@@ -137,7 +142,7 @@ export const Register = () => {
               </div>
             </div>
             <form onSubmit={openShop} className="open-shop-input">
-              <span className="greeting_2">Hello, <b className="bold">{cookies.get('user').name.split(' ').slice(0, 2).join(' ')}</b> let's fill in your shop details!</span>
+              <span className="greeting_2">Hello, <b className="bold">{cookies.get('user').name ? cookies.get('user').name.split(' ').slice(0, 2).join(' ') : cookies.get('user').username}</b> let's fill in your shop details!</span>
 
               <div className="name-shop-input">
                 <h4>Enter Your Shop Name</h4>

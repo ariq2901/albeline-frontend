@@ -74,7 +74,7 @@ const Signup = ({ onBack, toLogin }) => {
     try {
       const response = await Axios.post(url, body);
       if (vermethod === "email") {
-        Swal.fire({icon: 'success', title: 'Check your mailbox to verify your account'});
+        Swal.fire({icon: 'success', title: 'Check your mailbox', text: 'Check the verification email we\'sent to your mailbox'});
       } else {
         Swal.fire({icon: 'success', title: 'Successfully create an account!'});
       }

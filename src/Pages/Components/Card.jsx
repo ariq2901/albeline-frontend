@@ -2,16 +2,42 @@ import React, { Fragment } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { config } from "../../config";
 import { currencyFormatter, ratingFormatter, soldFormatter } from '../../utils';
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import 'react-lazy-load-image-component/src/effects/blur.css';
+import ImageLoad from './ImageLoad';
+import Placeholder from '../../assets/images/clip-art/placeholder.png';
 //TODO Tambah Model Card
+
+export const SkeletonCard = (total) => {
+  const skeleton = [];
+  for (let i = 0; i < total; i++) {
+    skeleton.push(
+      <div className="card-bp loading-wrapping">
+        <div className="card-bp-img loading">
+        </div>
+        <div className="info loadings">
+          <div className="product-name-wrapper loading">
+            <span className="product-bp-name"></span>
+          </div>
+          <div className="line-two loading"></div>
+          <div className="info-bp-product loading">
+            <span className="product-bp-price"></span>
+            <span className="product-bp-sold"></span>
+          </div>
+        </div>
+      </div>
+    );
+    
+  }
+
+  return skeleton;
+}
+
 
 export const Card = ({ image, name, rating, productId, price, sold }) => {
   return (
     <Fragment>
       <div className="card-p">
         <div className="card-img">
-          <LazyLoadImage placeholderSrc="/images/placeholder.png" src={`${config.api_host}/api/image/${image}`} alt="overlay"/>
+          <ImageLoad placeholder={Placeholder} src={`${config.api_host}/api/image/${image}`} alt="overlay"/>
         </div>
         <div className="card-info">
           <div className="product-name">{name}</div>
@@ -30,7 +56,7 @@ export const Card2 = ({image, name, productId, harga}) => {
     <Fragment>
       <div className="card-f">
         <div className="cardf-img">
-          <LazyLoadImage placeholderSrc="/images/placeholder.png" src={`${config.api_host}/api/image/${image}`} alt="product"/>
+          <ImageLoad placeholderSrc={Placeholder} src={`${config.api_host}/api/image/${image}`} alt="product"/>
         </div>
         <div className="cardf-info">
           <div className="productf-name">{name}</div>
@@ -66,7 +92,7 @@ export const Card4 = ({image, name, productId, price, sold, wishlist, onQuickvie
           </div>
         </div>
         <div className="card-bp-img">
-          <LazyLoadImage placeholderSrc="/images/placeholder.png" src={`${config.api_host}/api/image/${image}`} alt="pimage"/>
+          <ImageLoad placeholder={Placeholder} src={`${config.api_host}/api/image/${image}`} alt="pimage"/>
         </div>
         <NavLink to={`/detail/${productId}`} className="info">
           <div className="product-name-wrapper">
@@ -89,7 +115,7 @@ export const ReviewCard = ({ comment, rate, username, avatar, created_at }) => {
         <div className="review-status">
           <div className="reviewer">
             <div className="reviewer-img">
-              <LazyLoadImage placeholderSrc="/images/placeholder.png" src={`${config.api_host}/api/image/${avatar}`} alt="reviewer"/>
+              <ImageLoad placeholder={Placeholder} src={`${config.api_host}/api/image/${avatar}`} alt="reviewer"/>
             </div>
             <div className="reviewer-side">
               <span className="username">{username}</span>
@@ -114,7 +140,7 @@ export const CardList = ({image, name, productId, price, sold, rate}) => {
       <div className="product-card">
         <div className="product-card-image-wrapper">
           <div className="product-card-image">
-            <LazyLoadImage src={`${config.api_host}/api/image/${image}`} placeholderSrc="/images/placeholder.png" alt="img-card"/>
+            <ImageLoad src={`${config.api_host}/api/image/${image}`} placeholder={Placeholder} alt="img-card"/>
           </div>
         </div>
         <Link to={`/detail/${productId}`} className="product-card-info">

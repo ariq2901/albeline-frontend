@@ -11,7 +11,7 @@ import { CustomArrow } from '../Components/SliderCustomized';
 import { currencyFormatter, soldFormatter } from '../../utils';
 import FeaturedProduct from './FeaturedProduct';
 import { useDispatch, useSelector } from 'react-redux';
-import { Card4 } from '../Components/Card';
+import { Card4, SkeletonCard } from '../Components/Card';
 
 const ProductHome = () => {
   const dispatch = useDispatch();
@@ -19,6 +19,7 @@ const ProductHome = () => {
   const [product, setProduct] = useState([]);
   const [id, setId] = useState(0);
   const [clicked, setClicked] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [productId, setPorductId] = useState(0);
 
   useEffect(() => {
@@ -34,10 +35,12 @@ const ProductHome = () => {
 
   function getData(token, unmount) {
     const url = `${config.api_host}/api/products`;
+    setLoading(true)
     Axios.get(url, {cancelToken: token})
     .then(res => {
       if(!unmount) {
         setProduct(res.data.products);
+        setLoading(false);
       }
     })
     .catch(e => {
@@ -49,6 +52,7 @@ const ProductHome = () => {
           console.log('Another error happened:' + e.message);
         }
       }
+      setLoading(false)
     });
   }
 
@@ -82,7 +86,7 @@ const ProductHome = () => {
 
   return (
     <Fragment>
-      {console.log('product', product)}
+      {console.log('loading', loading)}
       <section className="sect-product">
         <div className="container">
           <div className="best-price-wrapper">
@@ -93,19 +97,24 @@ const ProductHome = () => {
             </div>
             <Slider {...settings} className="card-bp-wrapper">
               
-              {product.map((product, i) =>
-                <Card4 
-                  name={product.name}
-                  image={product.images[0].id}
-                  productId={product.id}
-                  price={product.price}
-                  sold={product.sold}
-                  key={i}
-                  onQuickview={() => {Quickview(product.id); setPorductId(product.id); setClicked(true)}}
-                  onWishlist={() => setWishlist(!wishlist)}
-                  wishlist={wishlist}
-                />
-              )}
+              {loading ? 
+                SkeletonCard(10)
+                :
+                product.map((product, i) =>
+                  <Card4 
+                    name={product.name}
+                    image={product.images[0].id}
+                    productId={product.id}
+                    price={product.price}
+                    sold={product.sold}
+                    key={i}
+                    onQuickview={() => {Quickview(product.id); setPorductId(product.id); setClicked(true)}}
+                    onWishlist={() => setWishlist(!wishlist)}
+                    wishlist={wishlist}
+                  />
+                )
+              }
+
 
             </Slider>
           </div>

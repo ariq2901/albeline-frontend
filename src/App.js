@@ -16,6 +16,8 @@ import { PushNotification } from "./experiment/pushnotification";
 import ListProduct from "./Pages/ListProduct";
 import Register from "./Pages/Store/Register";
 import Seller from "./Pages/Store";
+import AuthGuarder from "./Pages/Guarder/AuthGuarder";
+import NotFound from "./Pages/Components/Notfound";
 
 function App() {
   return (
@@ -32,17 +34,20 @@ function App() {
           <Route path="/detail/:id">
             <Detail />
           </Route>
-          <Route path="/cart">
+          <AuthGuarder path="/cart">
             <Cart />
-          </Route>
-          <Route path="/open-shop">
+          </AuthGuarder>
+          <AuthGuarder path="/open-shop">
             <Register />
-          </Route>
-          <Route path="/seller">
+          </AuthGuarder>
+          <AuthGuarder path="/seller">
             <Seller />
-          </Route>
+          </AuthGuarder>
           <Route path="/experiment-image-upload">
             <UploadImage />
+          </Route>
+          <Route>
+            <NotFound />
           </Route>
         </Switch>
       </Router>

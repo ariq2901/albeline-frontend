@@ -53,7 +53,7 @@ const Dashboard = () => {
       <div className="dashboard">
         <div className="panel-title"><span>Dashboard</span></div>
         <div className="greeting-seller">
-          <h1>Welcome, {cookies.get('user').name.split(' ').slice(0, 2).join(' ')}</h1>
+          <h1>Welcome, {cookies.get('user').name ? cookies.get('user').name.split(' ').slice(0, 2).join(' ') : cookies.get('user').username}</h1>
           <span>If you are not making any mistake,<br/> It means you are not doing anything</span>
         </div>
         <div className="stats-space">
