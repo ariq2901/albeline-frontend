@@ -12,6 +12,7 @@ import { currencyFormatter, soldFormatter } from '../../utils';
 import FeaturedProduct from './FeaturedProduct';
 import { useDispatch, useSelector } from 'react-redux';
 import { Card4, SkeletonCard } from '../Components/Card';
+import Swal from 'sweetalert2';
 
 const ProductHome = () => {
   const dispatch = useDispatch();
@@ -20,6 +21,7 @@ const ProductHome = () => {
   const [id, setId] = useState(0);
   const [clicked, setClicked] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loading2, setLoading2] = useState(false);
   const [productId, setPorductId] = useState(0);
 
   useEffect(() => {
@@ -56,6 +58,51 @@ const ProductHome = () => {
     });
   }
 
+  const handleCart = async (id) => {
+    const url = `${config.api_host}/api/get-cart`;
+    const header = { 'Authorization': config.bearer_token }
+    setLoading2(true);
+    try {
+      const response = await Axios.get(url, { headers: header });
+      var list_cart = response.data.data.products;
+      addToCart(id, list_cart);
+    } catch (error) {
+      console.error(error.message);
+      if (error.response.status === 401) {
+        Swal.fire({icon: 'warning', title: 'Unauthorized', text: 'Please login first'});
+      }
+      setLoading2(false)
+    }
+  }
+
+  const addToCart = async (id, list) => {
+    let list_id = [];
+    list.map((product) => {
+      list_id.push(product.id)
+    });
+
+    let check_id = list_id.includes(id);
+    const url = `${config.api_host}/api/update-cart`;
+    const header = { 'Authorization': config.bearer_token }
+    const body = { product_id: [id] }
+    console.log('check_id', check_id);
+    if (check_id) {
+      setLoading(false)
+      alert('You\'ve added this product last time');
+      return false;
+    } else {
+      try {
+        const response_add = await Axios.post(url, body, { headers: header });
+        dispatch({type: 'CART_RENDER'})
+        console.log('response_add', response_add);
+        setLoading2(false)
+      } catch (error) {
+        console.error(error.message);
+        setLoading2(false)
+      }
+    }
+  }
+
   useEffect(() => {
     Quickview();
   }, [productId]);
@@ -86,7 +133,6 @@ const ProductHome = () => {
 
   return (
     <Fragment>
-      {console.log('loading', loading)}
       <section className="sect-product">
         <div className="container">
           <div className="best-price-wrapper">
@@ -110,7 +156,9 @@ const ProductHome = () => {
                     key={i}
                     onQuickview={() => {Quickview(product.id); setPorductId(product.id); setClicked(true)}}
                     onWishlist={() => setWishlist(!wishlist)}
+                    onCart={() => handleCart(product.id)}
                     wishlist={wishlist}
+                    loading={loading2}
                   />
                 )
               }

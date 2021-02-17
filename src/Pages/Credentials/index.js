@@ -40,7 +40,7 @@ const Credential = () => {
       document.getElementsByTagName("html")[0].style.overflowY = "hidden";
       document.getElementsByTagName("nav")[0].classList.add("nav-popup");
       for (let i = 0; i < overlay_popup.length; i++) {
-        document.getElementsByClassName("overlay-popup")[i].classList.add("popup-open");
+        overlay_popup[i].classList.add("popup-open");
       }
     } else if (
       overlay_popup.length &&
@@ -49,7 +49,7 @@ const Credential = () => {
       document.getElementsByTagName("html")[0].style.overflowY = "scroll";
       document.getElementsByTagName("nav")[0].classList.remove("nav-popup");
       for (let i = 0; i < overlay_popup.length; i++) {
-        document.getElementsByClassName("overlay-popup")[i].classList.remove("popup-open");
+        overlay_popup[i].classList.remove("popup-open");
       }
     }
   }, [CredentialPopup.open]);

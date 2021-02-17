@@ -223,14 +223,6 @@ const Detail = (props) => {
       }
       setLoading(false)
     }
-    // let input_action = [];
-    // let list_product_id = product_id_state.includes(id);
-
-    // if (list_product_id) {
-    //   alert('product id has been added to cart!');
-    // } else {
-    //   dispatch({type: "CART_COUNT", total: CartReducer.total + 1, product_id: id});
-    // }
   }
 
   const addToCart = async (id, list) => {

@@ -86,11 +86,29 @@ const CartReducer = (state = initialCart, action) => {
   }
 }
 
+const initialCheckout = {
+  products: []
+}
+
+const CheckoutReducer = (state = initialCheckout, action) => {
+  switch (action.type) {
+    case "CHECKOUT":
+      return {
+        ...state,
+        products: action.products
+      }
+  
+    default:
+      return state;
+  }
+}
+
 const reducer = combineReducers({
   QReducer,
   CredentialPopup,
   RegisterShop,
-  CartReducer
+  CartReducer,
+  CheckoutReducer
 });
 
 export default reducer;

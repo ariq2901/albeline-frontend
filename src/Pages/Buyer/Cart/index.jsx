@@ -1,11 +1,12 @@
 import React, { Fragment, useEffect, useState } from "react";
 import Cookies from "universal-cookie";
-import { currencyFormatter, soldFormatter } from "../../utils";
-import { config } from "../../config";
+import { currencyFormatter, soldFormatter } from "../../../utils";
+import { config } from "../../../config";
 import { useDispatch, useSelector } from "react-redux";
 import Axios from "axios";
-import ImageLoad from "../Components/ImageLoad";
-import Placeholder from '../../assets/images/clip-art/placeholder.png';
+import ImageLoad from "../../Components/ImageLoad";
+import Placeholder from '../../../assets/images/clip-art/placeholder.png';
+import { useHistory } from "react-router-dom";
 const cookies = new Cookies();
 
 const Cart = () => {
@@ -14,6 +15,11 @@ const Cart = () => {
   const [products, setProducts] = useState([]);
   const [value, setValue] = useState();
   const [loading, setLoading] = useState(false);
+  const [render, setRender] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [totalItem, setTotalItem] = useState(0);
+
+  let history = useHistory();
 
   const getCart = async (token, unmounted) => {
     const url = `${config.api_host}/api/get-cart`;
@@ -23,6 +29,8 @@ const Cart = () => {
       const response = await Axios.get(url, { headers: auth, cancelToken: token });
       if (!unmounted) {
         setProducts(response.data.data.products);
+        amountItem(response.data.data.products);
+        total(response.data.data.products);
       }
     } catch (e) {
       if (!unmounted) {
@@ -53,6 +61,86 @@ const Cart = () => {
     }
   }
 
+  const inputChange = (value, product_id) => {
+    let int = parseInt(value);
+    products.map((product) => {
+      if (value < 1) {
+        if (product.id === product_id) {
+          product.amount = product.amount;
+          return;
+        }
+        
+      }
+      if (product.id === product_id) {
+        product.amount = int;
+      }
+    })
+    setRender(render => render + 1)
+  }
+
+  const count = (product_id, type) => {
+    switch (type) {
+      case 'plus':
+        console.log('product_id', product_id);
+        products.map((product) => {
+          if (product.id === product_id) {
+            product.amount++;
+          }
+        })
+        setRender(render => render + 1)
+        break;
+
+      case 'minus':
+        console.log('product_id', product_id);
+        products.map((product) => {
+          if (product.id === product_id) {
+            if (product.amount < 2) {
+              return;
+            }
+            product.amount--;
+          }
+        })
+        setRender(render => render + 1)
+        break;
+    
+      default:
+        break;
+    }
+
+  }
+
+  const amountItem = (list = products) => {
+    var per_product = [];
+    let final;
+
+    list.map((product) => {
+      per_product = [...per_product, product.amount];
+    })
+    
+    final = per_product.reduce((a, b) => a + b, 0);
+    setTotalItem(final);
+  }
+
+  const total = (list = products) => {
+    var per_product = [];
+    let final;
+
+    list.map((product) => {
+      let count = (product.price * product.amount);
+      per_product = [...per_product, count];
+    })
+    console.log('counting', per_product);
+    
+    final = per_product.reduce((a, b) => a + b, 0).toString();
+    setTotalPrice(final);
+  }
+
+  const goCheckout = () => {
+    dispatch({type: 'CHECKOUT', products: products});
+
+    history.push('/order-checkout');
+  }
+
   useEffect(() => {
     let unmounted = false;
     let source = Axios.CancelToken.source();
@@ -63,39 +151,15 @@ const Cart = () => {
       source.cancel('Cancelling in cleanup');
     }
   }, [CartReducer.render]);
-  // const setAmount = (type, id) => {
-  //   if (type === "increment") {
-  //     // let objIndex = products.findIndex((obj) => obj.id == id);
-  //     // products[objIndex].amount = products[objIndex].amount + 1;
-  //     // let objIndex = products.findIndex((obj) => obj.id == id);
-  //     // [
-  //     //   ...products.slice(0, objIndex),
-  //     //   Object.assign({}, products[objIndex], ...products.slice(objIndex + 1)),
-  //     // ];
-  //   }
-  //   if (type === "decrement") {
-  //     setValue(value - 1);
-  //   }
-  // };
 
-  // // const subtotal = (p) => {
-  // //   if (p.length === 0) {
-  // //     return;
-  // //   }
-  // //   var amounts = [];
-  // //   p.map((product) => {
-  // //     amounts.push(product.harga);
-  // //   });
-
-  // //   return currencyFormatter(amounts.reduce(sumFunction));
-  // // };
-
-  // // function sumFunction(total, num) {
-  // //   return total + num;
-  // // }
-
+  useEffect(() => {
+    total();
+    amountItem();
+  }, [render]);
+  
   return (
     <Fragment>
+      {console.log('products', products)}
       <section className="cart-sect">
         <div className="cart-cont">
           <div className="cart-title">
@@ -118,13 +182,13 @@ const Cart = () => {
                     </div>
                     <div className="input-amount">
                       <button
-                      // onClick={() => setAmount("decrement", product.id)}
+                      onClick={() => count(product.id, 'minus')}
                       >
                         <i class="fas fa-minus"></i>
                       </button>
-                      <input type="text" name="amount" disabled value={product.amount} />
+                      <input type="number" name="amount" id="quantity-input" min="1" onKeyPress={event => event.charCode >= 48} onChange={e => inputChange(e.target.value, product.id)} value={product.amount} />
                       <button
-                      // onClick={() => setAmount("increment", product.id)}
+                      onClick={() => count(product.id, 'plus')}
                       >
                         <i class="fas fa-plus"></i>
                       </button>
@@ -146,18 +210,18 @@ const Cart = () => {
                 </div>
                 <div className="detail-payment">
                   <div className="total-price">
-                    <span>Total Price ({products.length} item)</span>
+                    <span>Total Price ({totalItem} item)</span>
                   </div>
                   <div className="price-amount">
-                    <span>{/* {subtotal(products)} */}</span>
+                    <span>{currencyFormatter(totalPrice)}</span>
                   </div>
                 </div>
                 <hr className="payment-divider" />
                 <div className="checkout-total">
                   <div className="total-price">Subtotal</div>
-                  <div className="price-amount">{/* {subtotal(products)} */}</div>
+                  <div className="price-amount">{currencyFormatter(totalPrice)}</div>
                 </div>
-                <button>Beli</button>
+                <button onClick={goCheckout}>Beli</button>
               </div>
             </div>
           </div>

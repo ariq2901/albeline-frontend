@@ -1,15 +1,16 @@
 import { Fragment, useEffect, useState } from "react";
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 export const currencyFormatter = (duit) => {
-  if(duit !== undefined) {
-    return duit.toLocaleString('id-ID', {
+  let int = parseInt(duit);
+  if(int !== undefined) {
+    return int.toLocaleString('id-ID', {
       style: 'currency',
       currency: 'IDR'
     }).slice(0, -3);
   } else {
-    console.error('Parameter Duit gak ada valuenya. Duit : ', duit);
+    console.error('Parameter duit gak ada valuenya. duit : ', int);
   }
 }
 
@@ -127,4 +128,8 @@ export const OfflineAlert = () => {
       </div>
     </Fragment>
   );
+}
+
+export function useQuery() {
+  return new URLSearchParams(useLocation().search);
 }

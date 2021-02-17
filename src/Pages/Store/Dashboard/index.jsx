@@ -4,12 +4,15 @@ import Cookie from 'universal-cookie';
 import Axios from 'axios';
 import { config } from '../../../config';
 import { useHistory } from 'react-router-dom';
+import { useQuery } from '../../../utils';
 const cookies = new Cookie();
 
 const Dashboard = () => {
   const [totalReviews, setTotalReviews] = useState();
   const [totalProducts, setTotalProducts] = useState();
+  const [popup, setPopup] = useState(false);
   let history = useHistory();
+  let query = useQuery();
 
   const storeReviews = async (token, unmounted) => {
     const url = `${config.api_host}/api/store-reviews`;
@@ -45,6 +48,12 @@ const Dashboard = () => {
     return () => {
       unmounted = true;
       source.cancel('Cancelling in cleanup');
+    }
+  }, []);
+
+  useEffect(() => {
+    if (query.get('seller')) {
+      setPopup(true)
     }
   }, []);
 

@@ -50,7 +50,7 @@ function FeaturedProduct() {
 
   return (
     <Fragment>
-      {console.log('products', products)}
+      {console.log('products featured', products)}
       <div className="container spacing-section">
       {/* featured-wrapper */}
         <div className="featured-wrapper">
@@ -63,7 +63,7 @@ function FeaturedProduct() {
           <Slider {...settings} className="rows-slider">
               
               {products.map((product, i) => 
-                <Card2 key={i} name={product.name} image={product.images[0].id} harga={product.harga} />
+                <Card2 key={i} name={product.name} image={product.images[0].id} harga={product.price} />
               )}
 
             </Slider>

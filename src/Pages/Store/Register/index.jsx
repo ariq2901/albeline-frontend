@@ -10,13 +10,11 @@ import { config } from '../../../config';
 const cookies = new Cookie();
 
 export const Register = () => {
-  const [display, setDisplay] = useState(false);
   const [groupedOptions, setGroupedOptions] = useState([]);
   const [city_id, setCity_id] = useState([]);
-  const [addressSelection, setAddressSelection] = useState([]);
   const node = useRef();
-  let history = useHistory();
   const dispatch = useDispatch();
+  let history = useHistory();
 
   const getCity = async (token) => {
     // own Proxy Server
@@ -64,7 +62,6 @@ export const Register = () => {
   }
 
   const handleSelect = (addressVal) => {
-    setAddressSelection(addressVal);
     setCity_id(addressVal.value);
     console.log('city_id', addressVal.value)
   };
@@ -93,7 +90,7 @@ export const Register = () => {
     try {
       const response = await Axios.post(url, body, {headers: header});
       dispatch({type: "REGISTER_SHOP", registered: true});
-      Swal.fire({icon: 'success', title: 'your shop has been created', text: 'Let\'s fill up your store with your products!'}).then(() => {history.push('/seller/dashboard')});
+      Swal.fire({icon: 'success', title: 'your shop has been created', text: 'Let\'s fill up your store with your products!'}).then(() => {history.push('/seller/dashboard?seller=new')});
     } catch(e) {
       Swal.fire({icon: 'error', title: 'Oops...', text: 'An error Occured'});
       console.error('Failure created a store: ', e);

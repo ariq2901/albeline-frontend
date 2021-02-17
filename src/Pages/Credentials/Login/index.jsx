@@ -102,7 +102,7 @@ const Login = ({ onBack, toSignup }) => {
               <span className="small-text">
                 Welcome back, please use your verified account to login
               </span>
-              <div className="input-signup">
+              <form className="input-signup" onSubmit={Loginn}>
                 <div
                   className="border-input">
                   {
@@ -129,8 +129,8 @@ const Login = ({ onBack, toSignup }) => {
                 <div className="border-input">
                   <input type="password" id="pass-input" placeholder="Password" />
                 </div>
-              </div>
-              <button className="submit-signin" onClick={Loginn} disabled={loading}>{loading ? <PulseLoader color="#ffffff" size="8" loading={loading} /> : "Log In"}</button>
+              <button className="submit-signin" type="submit" disabled={loading}>{loading ? <PulseLoader color="#ffffff" size="8" loading={loading} /> : "Log In"}</button>
+              </form>
             </div>
           </div>
         </div>

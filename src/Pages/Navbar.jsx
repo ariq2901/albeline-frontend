@@ -231,7 +231,7 @@ const Navbar = () => {
                       </div>
                       <div className="menu-action">
                         <div className="user-store">
-                          {store ? <button><Link to="/seller/dashboard">Seller Dashboard</Link></button> : <button><Link to="open-shop">Open Shop</Link></button>}
+                          {store ? <button><Link to="/seller/dashboard">Seller Dashboard</Link></button> : <button><Link to="/open-shop">Open Shop</Link></button>}
                         </div>
                         <div className="more">
                           <Link to="history">Purchase History</Link>

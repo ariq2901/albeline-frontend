@@ -9,7 +9,7 @@ import Quickview from "./Pages/Components/Quickview";
 import { OfflineAlert } from "./utils";
 import { store } from "./redux";
 import { Provider } from "react-redux";
-import Cart from "./Pages/Cart";
+import Cart from "./Pages/Buyer/Cart";
 import UploadImage from "./experiment/uploadImage";
 import Credential from "./Pages/Credentials";
 import { PushNotification } from "./experiment/pushnotification";
@@ -18,6 +18,7 @@ import Register from "./Pages/Store/Register";
 import Seller from "./Pages/Store";
 import AuthGuarder from "./Pages/Guarder/AuthGuarder";
 import NotFound from "./Pages/Components/Notfound";
+import Checkout from "./Pages/Buyer/Checkout";
 
 function App() {
   return (
@@ -34,7 +35,7 @@ function App() {
           <Route path="/detail/:id">
             <Detail />
           </Route>
-          <AuthGuarder path="/cart">
+          <AuthGuarder path="/cart" exact>
             <Cart />
           </AuthGuarder>
           <AuthGuarder path="/open-shop">
@@ -46,6 +47,9 @@ function App() {
           <Route path="/experiment-image-upload">
             <UploadImage />
           </Route>
+          <AuthGuarder path="/cart/checkout">
+            <Checkout />
+          </AuthGuarder>
           <Route>
             <NotFound />
           </Route>

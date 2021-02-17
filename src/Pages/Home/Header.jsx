@@ -2,14 +2,6 @@ import React, { Fragment, useEffect, useState } from 'react';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Clothes from '../../assets/images/icons/clothes.png';
-import Sale from '../../assets/images/icons/sale.png';
-import Phone from '../../assets/images/icons/phone.png';
-import AlatTulis from '../../assets/images/icons/alat-tulis.png';
-import FreeOngkir from '../../assets/images/icons/free-ongkir.png';
-import BestPrice from '../../assets/images/icons/best-price.png';
-import Computer from '../../assets/images/icons/computer.png';
-import Toy from '../../assets/images/icons/toy.png';
 import { CustomArrow } from '../Components/SliderCustomized';
 import { config } from '../../config';
 import Axios from 'axios';
@@ -19,12 +11,44 @@ import Placeholder from '../../assets/images/placeholder.jpg';
 const Header = () => {
   const [bigBanner, setBigBanner] = useState([]);
   const [smallBanner, setSmallBanner] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [id, setId] = useState(0);
+
+  const getCategories = async (unmounted, token) => {
+    const url = `${config.api_host}/api/category`;
+
+    try {
+      const response = await Axios.get(url);
+      if (!unmounted) {
+        setCategories(response.data.categories);
+      }
+    } catch (error) {
+      if (!unmounted) {
+        console.error(error.message);
+        if (Axios.isCancel(error)) {
+          console.log(`request cancelled: ${error.message}`);
+        } else {
+          console.error('Another error happened: ' + error.message);
+        }
+      }
+    }
+  }
 
   useEffect(() => {
     getBigBanner();
     getSmallBanner();
   }, [id]);
+
+  useEffect(() => {
+    let unmounted = false;
+    let source = Axios.CancelToken.source();
+    getCategories(unmounted, source.token);
+
+    return () => {
+      unmounted = true;
+      source.cancel('Cancelling in cleanup');
+    }
+  }, []);
 
   function getBigBanner() {
     const url = `${config.api_host}/api/banners/big`;
@@ -48,95 +72,87 @@ const Header = () => {
     }
   }
 
-  var settings = {
-    customPaging: function(i) {
-      return (
-        <a>
-          <div className="strip-slick-dots"></div>
-        </a>
-      );
-    },
-    dots: true,
-    dotsClass: "slick-dots banner-dots slick-thumb",
+  // var settings = {
+  //   customPaging: function(i) {
+  //     return (
+  //       <a>
+  //         <div className="strip-slick-dots"></div>
+  //       </a>
+  //     );
+  //   },
+  //   className: "center",
+  //   centerMode: true,
+  //   centerPadding: "60px",
+  //   dots: true,
+  //   dotsClass: "slick-dots banner-dots slick-thumb",
+  //   infinite: true,
+  //   slidesToShow: 1,
+  //   slidesToScroll: 1,
+  //   autoplay: true,
+  //   speed: 500,
+  //   autoplaySpeed: 5000,
+  //   nextArrow: <CustomArrow prev={false} />,
+  //   prevArrow: <CustomArrow prev={true}/>,
+  // };
+
+  const settings = {
+    className: "center",
+    centerMode: true,
     infinite: true,
+    centerPadding: "220px",
     slidesToShow: 1,
-    slidesToScroll: 1,
+    speed: 800,
     autoplay: true,
-    speed: 500,
-    autoplaySpeed: 5000,
+    autoplaySpeed: 4000,
     nextArrow: <CustomArrow prev={false} />,
     prevArrow: <CustomArrow prev={true}/>,
   };
 
+  var settings2 = {
+    dots: false,
+    slidesToShow: 11,
+    slidesToScroll: 1,
+    nextArrow: <CustomArrow prev={false} />,
+    prevArrow: <CustomArrow prev={true}/>,
+  };
+  
   return (
     <Fragment>
-      {console.log("Small banner", smallBanner)}
+      {console.log("CATEGORIES", categories)}
       <section className="home-header">
         <div className="container">
           <div className="content-header">
-            <div className="rest-content-item">
+            {/* <div className="rest-content-item">
               {smallBanner.map((image, i) =>
                 <div className="small-banner-wrapper" key={i} style={{ backgroundImage: `url(${config.api_host}/api/image/${image.image.id})` }}></div>
-              )}
-            </div>
+                )}
+              </div> */}
             <Slider {...settings} className="content3-item">
               {bigBanner.map((image, i) =>
                 <div key={i} className="big-banner-wrapper">
-                  <ImageLoad placeholder={Placeholder} src={`${config.api_host}/api/image/${image.image.id}`} alt="banner"/>
+                  <div className="big-banner">
+                    <ImageLoad placeholder={Placeholder} src={`${config.api_host}/api/image/${image.image.id}`} alt="banner"/>
+                  </div>
                 </div>
               )}
             </Slider>
           </div>
           <div className="category-grid-ico">
 
-            <div className="cat-ico-wrapper">
-              <div className="cat-ico">
-                <img src={Clothes} alt="ico"/>
-              </div>
-              <span>Clothes</span>
-            </div>
-            <div className="cat-ico-wrapper">
-              <div className="cat-ico">
-                <img src={Sale} alt="ico"/>
-              </div>
-              <span>Extra Deals</span>
-            </div>
-            <div className="cat-ico-wrapper">
-              <div className="cat-ico">
-                <img src={Phone} alt="ico"/>
-              </div>
-              <span>Smartphone</span>
-            </div>
-            <div className="cat-ico-wrapper">
-              <div className="cat-ico">
-                <img src={AlatTulis} alt="ico"/>
-              </div>
-              <span>Alat Tulis</span>
-            </div>
-            <div className="cat-ico-wrapper">
-              <div className="cat-ico">
-                <img src={FreeOngkir} alt="ico"/>
-              </div>
-              <span>Gratis Ongkir</span>
-            </div>
-            <div className="cat-ico-wrapper">
-              <div className="cat-ico">
-                <img src={BestPrice} alt="ico"/>
-              </div>
-              <span>Termurah</span>
-            </div>
-            <div className="cat-ico-wrapper">
-              <div className="cat-ico">
-                <img src={Toy} alt="ico"/>
-              </div>
-              <span>Mainan</span>
-            </div>
-            <div className="cat-ico-wrapper">
-              <div className="cat-ico">
-                <img src={Computer} alt="ico"/>
-              </div>
-              <span>Hardware</span>
-            </div>
+            <Slider {...settings2} className="categories-slider">
+
+              {
+                categories.map((category, i) =>
+                  <div className="cat-ico-wrapper" key={i}>
+                    <div className="cat-ico">
+                      <img src={`${config.api_host}/api/image/${category.image.id}`} alt="ico"/>
+                    </div>
+                    <span>{category.name}</span>
+                  </div>
+                )
+              }
+
+            </Slider>
 
           </div>
         </div>
