@@ -23,7 +23,7 @@ const Cart = () => {
 
   const getCart = async (token, unmounted) => {
     const url = `${config.api_host}/api/get-cart`;
-    const auth = { 'Authorization': config.bearer_token }
+    const auth = { 'Authorization': `Bearer ${cookies.get('user_token')}` }
     console.log('masuk sini');
     try {
       const response = await Axios.get(url, { headers: auth, cancelToken: token });
@@ -47,7 +47,7 @@ const Cart = () => {
   const removeItem = async (product_id) => {
     const url = `${config.api_host}/api/remove-cart`
     const body = { product_id }
-    const auth = { 'Authorization': config.bearer_token }
+    const auth = { 'Authorization': `Bearer ${cookies.get('user_token')}` }
 
     setLoading(true)
     try {
@@ -135,10 +135,23 @@ const Cart = () => {
     setTotalPrice(final);
   }
 
-  const goCheckout = () => {
-    dispatch({type: 'CHECKOUT', products: products});
+  const validate = (user_id) => {
+    console.log('user_id', user_id);
+    const user = cookies.get('user');
+    if (user.name === null || user.address === null || user.city_id === null) {
+      alert('You must complete your data before going to the checkout section');
+      history.push('/user/settings')
+      return false;
+    }
+    return true;
+  }
 
-    history.push('/order-checkout');
+  const goCheckout = () => {
+    const validation = validate(cookies.get('user').id);
+    if (validation) {
+      history.push('/order-checkout');
+    }
+    dispatch({type: 'CHECKOUT', products: products});
   }
 
   useEffect(() => {
@@ -178,7 +191,7 @@ const Cart = () => {
                       <div className="truncate" style={{ WebkitLineClamp: "1" }} >
                         <span className="name">{product.name}</span>
                       </div>
-                      <span>{soldFormatter(product.sold)}</span>
+                      <span>{product.store}</span>
                     </div>
                     <div className="input-amount">
                       <button

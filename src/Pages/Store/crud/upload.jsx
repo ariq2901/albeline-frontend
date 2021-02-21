@@ -18,27 +18,6 @@ export const Upload = () => {
 
   let history = useHistory();
 
-  //! validasi image
-  // const validate = (num, e) => {
-  //   console.log('num', num);
-  //   var imageInput = document.getElementById(`image${num}`).value;
-  //   console.log(imageInput);
-  //   var blnValid = false;
-  //   for (let j = 0; j < validFileExt.length; j++) {
-  //     var imageCurExtension = validFileExt[j];
-  //     if (imageInput.substr(imageInput.length - imageCurExtension.length, imageCurExtension.length).toLowerCase() == imageCurExtension.toLowerCase()) {
-  //       blnValid = true;
-  //       handleChange(e);
-  //       break;
-  //     }
-  //   }
-
-  //   if (!blnValid) {
-  //     alert("Sorry, " + imageInput.substr(12, imageInput.length) + " is invalid, allowed extensions are " + validFileExt.join(', '));
-  //     return false;
-  //   }
-  // }
-
   const onDrop = useCallback((acceptedFile, p) => {
     console.log('acceptedFile', acceptedFile);
     console.log('currentUpload', currentUpload);
@@ -132,7 +111,7 @@ export const Upload = () => {
           <form id="imageform" onSubmit={addFormData}>
             <div className="preview-upload-wrapper">
               <div className="guide-vector main"></div>
-              {loading && 
+              {loading && currentUpload === 1 && 
                 <div class="progress">
                   <div class="progress-bar" role="progressbar" style={{ width: `${uploadPercentage}%` }} aria-valuenow={uploadPercentage} aria-valuemin="0" aria-valuemax="100">{uploadPercentage}%</div>
                 </div>
@@ -146,7 +125,7 @@ export const Upload = () => {
               {currentUpload === 2 ? null : <div className="disabled"></div>}
               {successUpload > 2 ? <div className="disabled success"><i class="bi bi-cloud-check"></i></div> : null}
               <div className="guide-vector front"></div>
-              {loading && 
+              {loading && currentUpload === 2 && 
                 <div class="progress">
                   <div class="progress-bar" role="progressbar" style={{ width: `${uploadPercentage}%` }} aria-valuenow={uploadPercentage} aria-valuemin="0" aria-valuemax="100">{uploadPercentage}%</div>
                 </div>
@@ -159,7 +138,7 @@ export const Upload = () => {
               {currentUpload === 3 ? null : <div className="disabled"></div>}
               {successUpload > 3 ? <div className="disabled success"><i class="bi bi-cloud-check"></i></div> : null}
               <div className="guide-vector right"></div>
-              {loading && 
+              {loading && currentUpload === 3 && 
                 <div class="progress">
                   <div class="progress-bar" role="progressbar" style={{ width: `${uploadPercentage}%` }} aria-valuenow={uploadPercentage} aria-valuemin="0" aria-valuemax="100">{uploadPercentage}%</div>
                 </div>
@@ -172,7 +151,7 @@ export const Upload = () => {
               {currentUpload === 4 ? null : <div className="disabled"></div>}
               {successUpload > 4 ? <div className="disabled success"><i class="bi bi-cloud-check"></i></div> : null}
               <div className="guide-vector upper"></div>
-              {loading && 
+              {loading && currentUpload === 4 && 
                 <div class="progress">
                   <div class="progress-bar" role="progressbar" style={{ width: `${uploadPercentage}%` }} aria-valuenow={uploadPercentage} aria-valuemin="0" aria-valuemax="100">{uploadPercentage}%</div>
                 </div>
@@ -185,7 +164,7 @@ export const Upload = () => {
               {currentUpload === 5 ? null : <div className="disabled"></div>}
               {successUpload > 5 ? <div className="disabled success"><i class="bi bi-cloud-check"></i></div> : null}
               <div className="guide-vector detail"></div>
-              {loading && 
+              {loading && currentUpload === 5 && 
                 <div class="progress">
                   <div class="progress-bar" role="progressbar" style={{ width: `${uploadPercentage}%` }} aria-valuenow={uploadPercentage} aria-valuemin="0" aria-valuemax="100">{uploadPercentage}%</div>
                 </div>
@@ -198,7 +177,7 @@ export const Upload = () => {
               {currentUpload === 6 ? null : <div className="disabled"></div>}
               {successUpload > 6 ? <div className="disabled success"><i class="bi bi-cloud-check"></i></div> : null}
               <div className="guide-vector back"></div>
-              {loading && 
+              {loading && currentUpload === 6 && 
                 <div class="progress">
                   <div class="progress-bar" role="progressbar" style={{ width: `${uploadPercentage}%` }} aria-valuenow={uploadPercentage} aria-valuemin="0" aria-valuemax="100">{uploadPercentage}%</div>
                 </div>

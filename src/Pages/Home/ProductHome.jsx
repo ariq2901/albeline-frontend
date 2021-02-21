@@ -13,6 +13,8 @@ import FeaturedProduct from './FeaturedProduct';
 import { useDispatch, useSelector } from 'react-redux';
 import { Card4, SkeletonCard } from '../Components/Card';
 import Swal from 'sweetalert2';
+import Cookie from 'universal-cookie';
+var cookies = new Cookie();
 
 const ProductHome = () => {
   const dispatch = useDispatch();
@@ -60,7 +62,7 @@ const ProductHome = () => {
 
   const handleCart = async (id) => {
     const url = `${config.api_host}/api/get-cart`;
-    const header = { 'Authorization': config.bearer_token }
+    const header = { 'Authorization': `Bearer ${cookies.get('user_token')}` }
     setLoading2(true);
     try {
       const response = await Axios.get(url, { headers: header });
@@ -83,7 +85,7 @@ const ProductHome = () => {
 
     let check_id = list_id.includes(id);
     const url = `${config.api_host}/api/update-cart`;
-    const header = { 'Authorization': config.bearer_token }
+    const header = { 'Authorization': `Bearer ${cookies.get('user_token')}` }
     const body = { product_id: [id] }
     console.log('check_id', check_id);
     if (check_id) {

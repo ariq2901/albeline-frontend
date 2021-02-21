@@ -1,4 +1,6 @@
 import { combineReducers } from "redux";
+import Cookie from 'universal-cookie';
+var cookies = new Cookie();
 
 const initialQ = {
   open: false,
@@ -103,12 +105,30 @@ const CheckoutReducer = (state = initialCheckout, action) => {
   }
 }
 
+const initialRender = {
+  render: 0
+}
+
+const RenderReducer = (state = initialRender, action) => {
+  switch (action.type) {
+    case "SET_RENDER":
+      return {
+        ...state,
+        render: state.render + 1
+      }
+  
+    default:
+      return state;
+  }
+}
+
 const reducer = combineReducers({
   QReducer,
   CredentialPopup,
   RegisterShop,
   CartReducer,
-  CheckoutReducer
+  CheckoutReducer,
+  RenderReducer
 });
 
 export default reducer;

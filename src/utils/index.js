@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { useHistory, useLocation } from "react-router-dom";
+import Axios from "axios";
 
 export const currencyFormatter = (duit) => {
   let int = parseInt(duit);
@@ -85,6 +86,7 @@ export const ratingFormatter = (rating) => {
         );
       }
     }
+    console.log('starsComponent', starsComponent)
     return (
       starsComponent
     );
@@ -132,4 +134,29 @@ export const OfflineAlert = () => {
 
 export function useQuery() {
   return new URLSearchParams(useLocation().search);
+}
+
+export const getCity = async (id) => {
+  if (id !== undefined) { 
+    var name = 'hello';
+    
+    let city_id = id.toString();
+    const url = `http://localhost:2901/proxy/starter/city`;
+    const qs = {id: city_id};
+    const header = {
+      key: "11fa41eaf62c64584a90b03a759c5296",
+      "Content-Type": "application/json",
+    };
+    try {
+      const response = await Axios.get(url, {params: qs, headers: header })
+      console.log('response city name', response);
+      name = 'helowwq'
+      // return `${response.data.rajaongkir.results.city_name}`
+    } catch (error) {
+      console.error(error);
+    }
+    return name;
+  } else {
+    console.error('Parameter id gak ada valuenya: ', id);
+  }
 }

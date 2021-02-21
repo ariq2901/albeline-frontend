@@ -11,7 +11,8 @@ const cookies = new Cookie();
 
 export const Register = () => {
   const [groupedOptions, setGroupedOptions] = useState([]);
-  const [city_id, setCity_id] = useState([]);
+  const [city_id, setCity_id] = useState('');
+  const [city_name, setCity_name] = useState('');
   const node = useRef();
   const dispatch = useDispatch();
   let history = useHistory();
@@ -63,7 +64,7 @@ export const Register = () => {
 
   const handleSelect = (addressVal) => {
     setCity_id(addressVal.value);
-    console.log('city_id', addressVal.value)
+    setCity_name(addressVal.label);
   };
   
   const formatGroupLabel = (data) => (
@@ -84,7 +85,8 @@ export const Register = () => {
 
     let body = {
       name,
-      city_id
+      city_id,
+      city_name
     }
     console.log('body', body);
     try {

@@ -19,6 +19,7 @@ import Seller from "./Pages/Store";
 import AuthGuarder from "./Pages/Guarder/AuthGuarder";
 import NotFound from "./Pages/Components/Notfound";
 import Checkout from "./Pages/Buyer/Checkout";
+import User from "./Pages/User";
 
 function App() {
   return (
@@ -35,8 +36,14 @@ function App() {
           <Route path="/detail/:id">
             <Detail />
           </Route>
+          <AuthGuarder path="/user">
+            <User />
+          </AuthGuarder>
           <AuthGuarder path="/cart" exact>
             <Cart />
+          </AuthGuarder>
+          <AuthGuarder path="/order-checkout" exact>
+            <Checkout />
           </AuthGuarder>
           <AuthGuarder path="/open-shop">
             <Register />

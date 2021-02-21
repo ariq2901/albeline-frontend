@@ -58,6 +58,8 @@ const Login = ({ onBack, toSignup }) => {
           dispatch({type: 'CREDENTIAL_POPUP', open: false});
           cookies.set('user_token', response.data.data.token.token);
           cookies.set('login', true);
+          const token = response.data.data.token.token;
+          getUser(token);
         } catch(e) {
           Swal.fire({icon: 'error', title: `An error occured`});
           console.log('error login ', e)
@@ -69,12 +71,15 @@ const Login = ({ onBack, toSignup }) => {
 
   const getUser = async (token) => {
     const url = `${config.api_host}/api/user-detail`;
+    setLoading(true);
     try {
       const response = await Axios.get(url, {headers: {'Authorization': `Bearer `.concat(token)}});
-      window.location.reload();
       cookies.set('user', response.data.user);
+      setLoading(false);
+      dispatch({type: "SET_RENDER"});
     } catch(e) {
       console.error('user detail error: ', e.message);
+      setLoading(false);
     }
   }
 

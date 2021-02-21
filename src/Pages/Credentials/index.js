@@ -26,13 +26,13 @@ const Credential = () => {
     dispatch({ type: "POPUP_TYPE", popup: "login" });
   }
 
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClick);
+  // useEffect(() => {
+  //   document.addEventListener("mousedown", handleClick);
 
-    return () => {
-      document.addEventListener("mousedown", handleClick);
-    };
-  }, []);
+  //   return () => {
+  //     document.addEventListener("mousedown", handleClick);
+  //   };
+  // }, []);
 
   useEffect(() => {
     var overlay_popup = document.getElementsByClassName("overlay-popup");

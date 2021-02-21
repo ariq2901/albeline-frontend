@@ -13,9 +13,11 @@ const cookies = new Cookies();
 const Navbar = () => {
   const CartReducer = useSelector(state => state.CartReducer);
   const RegisterShop = useSelector(state => state.RegisterShop);
+  const RenderReducer = useSelector(state => state.RenderReducer);
   const dispatch = useDispatch();
   const [input, setInput] = useState(false);
   const [total, setTotal] = useState(0);
+  const [render, setRender] = useState(0);
   const [clicked, setClicked] = useState(false);
   const [search, setSearch] = useState([]);
   const [cart, setCart] = useState([]);
@@ -25,7 +27,7 @@ const Navbar = () => {
   const [options, setOptions] = useState([]);
   const login = cookies.get("login");
   const searchRef = useRef(null);
-  const node = useRef();
+  let node = useRef();
   let history = useHistory();
   
   const loginPopup = (truep) => {
@@ -34,10 +36,10 @@ const Navbar = () => {
 
   const checkUserStore = async (token, unmounted) => {
     const url = `${config.api_host}/api/check-store`;
-    const header = {'Authorization': config.bearer_token}
+    const header = {'Authorization': `Bearer ${cookies.get('user_token')}`}
     
     try {
-      const response = await Axios.get(url, {headers: header});
+      const response = await Axios.get(url, {headers: header, cancelToken: token});
       if (!unmounted) {
         setStore(response.data.message);
       }
@@ -55,7 +57,7 @@ const Navbar = () => {
   
   const handleCart = async (token, unmounted) => {
     const url = `${config.api_host}/api/get-cart`;
-    const auth = {'Authorization': config.bearer_token}
+    const auth = {'Authorization': `Bearer ${cookies.get('user_token')}`}
     console.log('masuk sini');
     try {
       const response = await Axios.get(url, {headers: auth, cancelToken: token});
@@ -81,11 +83,12 @@ const Navbar = () => {
 
     try {
       const response = await Axios.get(url, {headers: header});
+      console.log('response logout', response)
       cookies.remove('user');
       cookies.remove('user_token');
       cookies.remove('login');
+      dispatch({type: "SET_RENDER"})
       history.push('/');
-      window.location.reload();
     } catch (e) {
       console.error(e.message);
       Swal.fire({icon: 'error', title: 'Oops...', text: e.message});
@@ -115,11 +118,13 @@ const Navbar = () => {
   // }
 
   const handleMenu = event => {
-    if (node.current.contains(event.target)) {
-      return;
+    if (cookies.get('login') === true) {
+      if (node.current.contains(event.target)) {
+        return;
+      } 
+      setMenu(false);
     }
-
-    setMenu(false);
+    return;
   }
 
   const handleClick = event => {
@@ -185,7 +190,7 @@ const Navbar = () => {
 
   return (
     <Fragment>
-      {console.log('CartReducer.render', CartReducer.render)}
+      {console.log("cookies.get('login')", cookies.get('login'))}
       <nav>
         <div className="container">
           <div className="nav-wrapper">
@@ -236,7 +241,7 @@ const Navbar = () => {
                         <div className="more">
                           <Link to="history">Purchase History</Link>
                           <Link to="wishlist">Wishlist</Link>
-                          <Link to="settings">Settings</Link>
+                          <Link to="/user/settings">Settings</Link>
                           <div className="signout" onClick={logout}>Sign out <img src={SignoutIco} alt="ico"/></div>
                         </div>
                       </div>

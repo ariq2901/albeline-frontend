@@ -106,6 +106,20 @@
   font-weight: 600;
   font-display: swap;
 }
+@font-face {
+  font-family: "Nunito-Regular";
+  src: url("./assets/fonts/Nunito/Nunito-Regular.ttf");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Nunito-Semibold";
+  src: url("./assets/fonts/Nunito/Nunito-SemiBold.ttf");
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
 
 html,
 body {
@@ -131,6 +145,7 @@ h4 {
 
 h6 {
   margin: 0 !important;
+  line-height: unset;
 }
 
 .popup-open {
@@ -2115,7 +2130,6 @@ section.detail-sect {
   background-color: transparent;
   border: 2px solid #ecebeb;
   color: #f5f5f5;
-  padding-bottom: 1%;
 }
 
 .login-modal .r-panel {
@@ -2238,6 +2252,12 @@ section.detail-sect {
   transition: background 0.3s ease;
 }
 
+.r-panel .content .submit-signup:disabled, .r-panel .content .submit-signin:disabled {
+  background: #dddddd;
+  color: #2d2c37;
+  cursor: not-allowed;
+}
+
 .popup-back {
   position: absolute;
   top: 3%;
@@ -2261,6 +2281,7 @@ section.detail-sect {
 /*^ Cart Section */
 section.cart-sect {
   width: 100%;
+  min-height: 100vh;
   padding-top: 5vh !important;
   padding: 0 4vh;
   background-color: #f5f5f5;
@@ -2268,6 +2289,7 @@ section.cart-sect {
 
 .cart-sect .cart-cont {
   width: 100%;
+  min-height: 100vh;
   height: 100%;
   background-color: #fff;
   padding: 20px;
@@ -3502,7 +3524,7 @@ div.seller-page {
 .menu-panel .panel__link {
   padding-left: 10px;
   margin-top: 20px;
-  color: #515557;
+  color: #949697;
   height: 30px;
   display: flex;
   align-items: center;
@@ -3517,8 +3539,13 @@ div.seller-page {
   margin-top: 0;
 }
 
+.menu-panel .panel__link i {
+  display: flex;
+}
+
 .menu-panel .panel__link--active {
   border-left: 3px solid #00ce75;
+  color: #00ce75;
 }
 
 .seller-products {
@@ -4064,7 +4091,7 @@ form#imageform {
 
 .change-address-btn {
   color: rgba(49, 53, 59, 0.68);
-  font-family: "Nunito Sans", sans-serif;
+  font-family: "Nunito-Semibold", sans-serif;
   font-size: 1rem;
   height: 40px;
   line-height: 20px;
@@ -4160,19 +4187,17 @@ form#imageform {
 
 .shop-body-content {
   width: 100%;
-  height: 300px;
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
 }
 
 .shop-body-left {
   width: 100%;
-  height: 100%;
 }
 
 .shop-product {
   width: 100%;
-  height: 93px;
+  height: 121px;
   display: flex;
 }
 
@@ -4239,5 +4264,334 @@ form#imageform {
 }
 
 .shop-body-right {
-  background-color: var(--secondary-color);
+  /* background-color: var(--secondary-color); */
+  padding-left: 7%;
+}
+
+.shop-body-right .courier-selection, .shop-body-right .service-selection {
+  position: relative;
+  float: right;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.shop-body-right .courier-selection, .inner-service {
+  padding: 0 5%;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 9px;
+}
+
+.shop-body-right .courier-selection {
+  width: 60%;
+  height: 40px;
+  font-family: 'Nunito-Semibold';
+  font-size: 16px;
+  background-color: #00D865;
+  color: #fff;
+}
+
+.shop-body-right .service-selection {
+  width: 80%;
+  height: 40px;
+  font-size: 14px;
+  font-family: 'Roboto-Regular';
+}
+
+.shop-body-right .service-selection[disabled] {
+  cursor: not-allowed !important;
+}
+
+.shop-body-right .service-selection[disabled] .inner-service {
+  background-color: #dcdcdc;
+  border-color: rgb(197, 197, 197);
+}
+
+.inner-service {
+  border: 1px solid #000;
+}
+
+.inner-service > span {
+  color: #535b5f;
+}
+
+.courier-selection > i, .service-selection > .inner-service i {
+  transition: all 0.3s ease;
+}
+
+.courier-selection.downed > i, .service-selection.downed > .inner-service i {
+  transform: rotate(180deg);
+  transform-origin: 50%;
+  transition: all 0.3s ease;
+}
+
+.courier-selection.downed, .service-selection.downed .inner-service {
+  border-bottom: 0;
+  border-radius: 0;
+  transition: all 0.2s ease;
+}
+
+.courier-selection .courier-options, .service-selection .service-options {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  cursor: pointer;
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);;
+  border-radius: 0 0 9px 9px;
+  transition: all 0.3s ease;
+}
+
+.courier-selection .courier-options {
+  width: 100%;
+  height: 150px;
+  background-color: #00D865;
+}
+
+.service-selection .service-options {
+  width: 100%;
+  height: auto;
+  border: 1px solid #000;
+  background-color: #fff;
+  border-top: 0;
+}
+
+.courier-options.downed, .service-options.downed {
+  top: 100%;
+  opacity: 1;
+  pointer-events: all;
+  transition: all 0.3s ease;
+}
+
+.courier-options .courier {
+  padding: 0 8%;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.service-options .service {
+  padding: 0 8%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+  border-bottom: 1px dashed #ddd;
+}
+
+.service:last-child {
+  border-bottom: 0;
+}
+
+.service .service-name span {
+  font-family: 'Roboto-Medium';
+}
+
+.service .service-name p {
+  font-family: 'Nunito-Regular';
+  font-size: 12px;
+  color: #2d2c37;
+}
+
+.service .service-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.service .service-info span {
+  font-family: 'Nunito-SemiBold';
+  font-size: 13px;
+  color: #222831;
+}
+
+.service .service-info p {
+  font-size: 12px;
+  color: #30475e;
+}
+
+.courier i {
+  margin-left: 5px;
+}
+
+.courier i::before {
+  line-height: unset !important;
+  vertical-align: middle !important;
+}
+
+.shop-group .shop-footer {
+  min-height: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  border-top: 1px solid rgb(219, 222, 226);;
+}
+
+.shop-footer-row {
+  padding: 6px 0;
+}
+
+.shop-footer h6 {
+  font-family: 'Quicksand-Bold';
+}
+
+.shop-subtotal {
+  font-size: 15px;
+}
+
+.shop-subtotal, .shop-price, .shop-courier-cost {
+  font-family: 'Nunito-SemiBold';
+  display: flex;
+  justify-content: space-between;
+}
+
+.shop-price, .shop-courier-cost {
+  color: #535b5f;
+}
+
+.shop-subtotal p, .shop-subtotal span {
+  font-family: 'Roboto-Bold';
+}
+
+.shop-subtotal p {
+  white-space: pre-wrap;
+  cursor: pointer;
+}
+
+.shop-subtotal p i {
+  color: #66696f;
+}
+
+.shop-subtotal p i {
+  transition: all 0.3s ease;
+}
+
+.shop-subtotal.expand p i {
+  transform: rotate(180deg);
+  transform-origin: 50%;
+  transition: all 0.3s ease;
+}
+
+.shop-price.hide, .shop-courier-cost.hide {
+  display: none;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+
+
+
+
+
+
+
+/*^ Profle Section */
+.avatar-wrapper {
+  display: relative;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  box-shadow: 0 5px 8px rgba(0, 0, 0, 0.2);
+  background-color: #ddd;
+  overflow: hidden;
+}
+
+.avatar-wrapper img {
+  width: 100%;
+}
+
+.avatar-wrapper label {
+  position: absolute;
+  bottom: 0;
+  right: 15%;
+  width: 27px;
+  height: 27px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background-color: #03b34c;
+  cursor: pointer;
+}
+
+.avatar-wrapper label i {
+  display: flex;
+  font-size: 11px;
+  color: #fff;
+}
+
+.avatar-wrapper input {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.profile-email {
+  color: #959bbd;
+  font-family: 'Quicksand-Medium';
+}
+
+.profile-label {
+  font-family: 'Quicksand-Bold';
+}
+
+.input-profile {
+  width: 75%;
+  height: 38px;
+  font-family: 'Quicksand-Medium';
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  background-color: rgb(250, 250, 250);
+  color: #808080;
+}
+
+.css-yk16xz-control {
+  background: rgb(250, 250, 250) !important;
+}
+
+.input-profile:focus {
+  background-color: #fff;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.13);
+}
+
+.submit-profile {
+  width: 150px;
+  height: 40px;
+  border: none;
+  background: #03b34c;
+  border-radius: 10px;
+  font-family: 'Quicksand-Regular';
+  color: #fff;
+  box-shadow: 0 5px 10px rgba(0, 255, 94, 0.2);
+}
+
+.line-loading {
+  overflow: hidden;
+}
+
+.email-profile-input {
+  width: 30%;
+  height: 26px;
+  margin-top: 1vh;
+  border: 1px solid #ddd;
+  background-color: rgb(250, 250, 250);
+  font-family: 'Nunito-Regular';
+}
+
+.checkout-sect > .container {
+  min-height: 100vh;
 }

@@ -147,7 +147,7 @@ const Header = () => {
                     <div className="cat-ico">
                       <img src={`${config.api_host}/api/image/${category.image.id}`} alt="ico"/>
                     </div>
-                    <span>{category.name}</span>
+                    <span style={{ color: '#8296ab' }}>{category.name}</span>
                   </div>
                 )
               }
