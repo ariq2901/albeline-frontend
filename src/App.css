@@ -799,7 +799,6 @@ span.lihat-semua {
   margin-top: 1px;
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
   grid-gap: 2px;
 }
 
