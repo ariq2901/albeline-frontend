@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 import Cookies from "universal-cookie";
-import { currencyFormatter, soldFormatter } from "../../../utils";
+import { countTotal, currencyFormatter, soldFormatter } from "../../../utils";
 import { config } from "../../../config";
 import { useDispatch, useSelector } from "react-redux";
 import Axios from "axios";
@@ -28,7 +28,13 @@ const Cart = () => {
     try {
       const response = await Axios.get(url, { headers: auth, cancelToken: token });
       if (!unmounted) {
-        setProducts(response.data.data.products);
+        let customResponse = response.data.data.products.map((product) => {
+          product.amount = 1;
+          return product;
+        })
+        console.log('customResponse', customResponse)
+        setProducts(customResponse);
+
         amountItem(response.data.data.products);
         total(response.data.data.products);
       }
@@ -223,7 +229,7 @@ const Cart = () => {
                 </div>
                 <div className="detail-payment">
                   <div className="total-price">
-                    <span>Total Price ({totalItem} item)</span>
+                    <span>Total Price ({countTotal(products, 'amount')} item)</span>
                   </div>
                   <div className="price-amount">
                     <span>{currencyFormatter(totalPrice)}</span>
@@ -234,7 +240,7 @@ const Cart = () => {
                   <div className="total-price">Subtotal</div>
                   <div className="price-amount">{currencyFormatter(totalPrice)}</div>
                 </div>
-                <button onClick={goCheckout}>Beli</button>
+                <button className="cart-checkout-btn ripple" onClick={goCheckout}>Checkout</button>
               </div>
             </div>
           </div>

@@ -244,7 +244,7 @@ const Settings = () => {
 
   return (
     <Fragment>
-      <div className="profile-sect">
+      <div className="profile-sect" style={{ paddingLeft: '7%' }}>
         <div className="container">
           <div className="row d-flex">
             <div className="col-12">

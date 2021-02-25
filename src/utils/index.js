@@ -136,27 +136,19 @@ export function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
 
-export const getCity = async (id) => {
-  if (id !== undefined) { 
-    var name = 'hello';
-    
-    let city_id = id.toString();
-    const url = `http://localhost:2901/proxy/starter/city`;
-    const qs = {id: city_id};
-    const header = {
-      key: "11fa41eaf62c64584a90b03a759c5296",
-      "Content-Type": "application/json",
-    };
-    try {
-      const response = await Axios.get(url, {params: qs, headers: header })
-      console.log('response city name', response);
-      name = 'helowwq'
-      // return `${response.data.rajaongkir.results.city_name}`
-    } catch (error) {
-      console.error(error);
+export const countTotal = (list, key, type = 'item', price_key = 'price', item_amount = 'amount') => {
+  var per_item = [];
+  let final;
+
+  list.map((item) => {
+    if (type === 'price') {
+      let count = (item[`${price_key}`] * item[`${item_amount}`]);
+      per_item = [...per_item, count];
+    } else {
+      per_item = [...per_item, item[`${key}`]];
     }
-    return name;
-  } else {
-    console.error('Parameter id gak ada valuenya: ', id);
-  }
+  })
+  
+  final = per_item.reduce((a, b) => a + b, 0);
+  return final;
 }

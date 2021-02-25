@@ -1,6 +1,7 @@
 import Axios from 'axios';
 import React, { Fragment, useEffect, useState } from 'react';
 import { config } from '../../config';
+import { useQuery } from '../../utils';
 import { CardList } from '../Components/Card';
 
 const ListProduct = () => {
@@ -13,6 +14,7 @@ const ListProduct = () => {
   const [filter, setFilter] = useState({});
   const [checked, setChecked] = useState([]);
   const [price, setPrice] = useState([]);
+  let query = useQuery();
 
   const getProducts = (token, unmounted) => {
     var url = `${config.api_host}/api/search/products`;
@@ -64,12 +66,19 @@ const ListProduct = () => {
       });
     } else if (type === '' && condition === '') {
 
-      const url = `${config.api_host}/api/products`;
+      let url = `${config.api_host}/api/products`;
+      if (query.get('category')) {
+        url = `${config.api_host}/api/category/${query.get('category')}`
+      }
       
       Axios.get(url, {cancelToken: token})
       .then(response => {
         if(!unmounted) {
-          setProducts(response.data.products);
+          if (query.get('category')) {
+            setProducts(response.data.products.products);
+          } else {
+            setProducts(response.data.products);
+          }
         }
       })
       .catch(e => {
@@ -143,7 +152,7 @@ const ListProduct = () => {
       unmounted = true;
       source.cancel("cancelling in cleanup");
     }
-  }, [type, condition, ]);
+  }, [type, condition, query.get('category')]);
 
   useEffect(() => {
     let unmounted = false;

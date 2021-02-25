@@ -11,6 +11,7 @@ import { store } from "./redux";
 import { Provider } from "react-redux";
 import Cart from "./Pages/Buyer/Cart";
 import UploadImage from "./experiment/uploadImage";
+import RatingPicker from "./experiment/ratingpicker";
 import Credential from "./Pages/Credentials";
 import { PushNotification } from "./experiment/pushnotification";
 import ListProduct from "./Pages/ListProduct";
@@ -51,8 +52,8 @@ function App() {
           <AuthGuarder path="/seller">
             <Seller />
           </AuthGuarder>
-          <Route path="/experiment-image-upload">
-            <UploadImage />
+          <Route path="/experiment-rating-picker">
+            <RatingPicker/>
           </Route>
           <AuthGuarder path="/cart/checkout">
             <Checkout />

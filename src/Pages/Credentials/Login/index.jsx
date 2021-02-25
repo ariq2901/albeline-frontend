@@ -77,6 +77,7 @@ const Login = ({ onBack, toSignup }) => {
       cookies.set('user', response.data.user);
       setLoading(false);
       dispatch({type: "SET_RENDER"});
+      dispatch({type: "CART_RENDER"});
     } catch(e) {
       console.error('user detail error: ', e.message);
       setLoading(false);

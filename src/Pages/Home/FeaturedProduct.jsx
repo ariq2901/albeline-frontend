@@ -14,14 +14,23 @@ function FeaturedProduct() {
   const [ud, setUd] = useState(0);
   
   useEffect(() => {
-    GetProducts();
+    let unmounted = false;
+    let source = Axios.CancelToken.source();
+    GetProducts(unmounted, source.token);
+
+    return () => {
+      unmounted = true;
+      source.cancel('Cancelling request in cleanup')
+    }
   }, [ud]);
   
-  const GetProducts = async () => {
+  const GetProducts = async (unmounted, token) => {
+    const url = `${config.api_host}/api/products`;
     try {
-      const url = `${config.api_host}/api/products`;
-      const respons = await Axios.get(url);
-      setProducts(respons.data.products);
+      const respons = await Axios.get(url, {cancelToken: token});
+      if (!unmounted) {
+        setProducts(respons.data.products);
+      }
     } catch(e) {
       console.error('Fail ', e);
     }

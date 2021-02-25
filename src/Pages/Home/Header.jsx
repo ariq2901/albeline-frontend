@@ -7,12 +7,14 @@ import { config } from '../../config';
 import Axios from 'axios';
 import ImageLoad from '../Components/ImageLoad';
 import Placeholder from '../../assets/images/placeholder.jpg';
+import { useHistory } from 'react-router-dom';
 
 const Header = () => {
   const [bigBanner, setBigBanner] = useState([]);
   const [smallBanner, setSmallBanner] = useState([]);
   const [categories, setCategories] = useState([]);
   const [id, setId] = useState(0);
+  let history = useHistory()
 
   const getCategories = async (unmounted, token) => {
     const url = `${config.api_host}/api/category`;
@@ -143,7 +145,7 @@ const Header = () => {
 
               {
                 categories.map((category, i) =>
-                  <div className="cat-ico-wrapper" key={i}>
+                  <div className="cat-ico-wrapper" key={i} onClick={() => history.push(`/products?category=${category.id}`)}>
                     <div className="cat-ico">
                       <img src={`${config.api_host}/api/image/${category.image.id}`} alt="ico"/>
                     </div>

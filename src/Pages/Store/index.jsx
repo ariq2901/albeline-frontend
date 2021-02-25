@@ -2,9 +2,11 @@ import React, { Fragment } from 'react'
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import GettingStarted from '../Components/GettingStarted';
 import Add from './crud/add';
+import Edit from './crud/edit';
 import Upload from './crud/upload';
 import Dashboard from './Dashboard';
 import Menu from './Menu';
+import Order from './Orders';
 import Products from './Products';
 
 export const Seller = () => {
@@ -13,14 +15,18 @@ export const Seller = () => {
       <div className="overlay-popup">
         <section className="seller">
           <div className="container">
-            <div className="seller-page" style={{ paddingTop: '5vh' }}>
+            <div className="seller-page">
               <Router>
                 <Menu />
-                <div className="main-panel">
+                <div className="main-panel" style={{ paddingTop: '5vh' }}>
                   <Switch>
                     
                     <Route path="/seller/dashboard">
                       <Dashboard />
+                    </Route>
+
+                    <Route path="/seller/orders">
+                      <Order />
                     </Route>
 
                     <Route path="/seller/products">
@@ -33,6 +39,10 @@ export const Seller = () => {
 
                     <Route path="/seller/upload-product/:id">
                       <Upload />
+                    </Route>
+
+                    <Route path="/seller/edit-product/:id">
+                      <Edit />
                     </Route>
 
                   </Switch>

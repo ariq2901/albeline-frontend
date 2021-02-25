@@ -4,17 +4,20 @@ import { config } from '../../../config';
 import Cookie from 'universal-cookie';
 import { currencyFormatter } from '../../../utils';
 import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
 var cookies = new Cookie();
 
 const Products = () => {
   const [totalProducts, setTotalProducts] = useState();
   const [products, setProducts] = useState([]);
+  const [loadingDelete, setLoadingDelete] = useState(false);
+  const [render, setRender] = useState(0);
   let history = useHistory();
 
-  const storeReviews = async (token, unmounted) => {
+  const getProducts = async (token, unmounted) => {
     const url = `${config.api_host}/api/store-products`;
     const header = {'Authorization': `Bearer ${cookies.get('user_token')}`}
-
+    
     try {
       const response = await Axios.get(url, {headers: header, cancelToken: token});
       if (!unmounted) {
@@ -32,17 +35,33 @@ const Products = () => {
       }
     }
   }
+
+  const deleteProduct = async (product_id) => {
+    let url = `${config.api_host}/api/delete-product/${product_id}`;
+    const header = {'Authorization': `Bearer ${cookies.get('user_token')}`}
+
+    setLoadingDelete(true);
+    try {
+      const response = await Axios.delete(url, {headers: header});
+      Swal.fire({icon: 'success', title: 'Got it', text: response.data.message});
+      setLoadingDelete('false');
+      setRender(render => render + 1);
+    } catch (error) {
+      console.error(error);
+      Swal.fire({icon: 'error', title: 'Oops...', text: 'an error occured. please try again'});
+    }
+  }
   
   useEffect(() => {
     let unmounted = false;
     let source = Axios.CancelToken.source();
-    storeReviews(source.token, unmounted);
+    getProducts(source.token, unmounted);
 
     return () => {
       unmounted = true;
       source.cancel('Cancelling in cleanup');
     }
-  }, []);
+  }, [render]);
 
   return (
     <Fragment>
@@ -69,8 +88,8 @@ const Products = () => {
                 <td>{currencyFormatter(product.price)}</td>
                 <td>{product.sold}</td>
                 <td className="text-center">
-                  <button className="btn btn-primary mr-2">Edit</button>
-                  <button className="btn btn-danger">Delete</button>
+                  <button className="btn btn-primary mr-2" onClick={() => history.push(`/seller/edit-product/${product.id}`)}>Edit</button>
+                  <button className="btn btn-danger" onClick={() => deleteProduct(product.id)} disabled={loadingDelete} style={{cursor: loadingDelete ? 'not-allowed' : 'pointer'}}>Delete</button>
                 </td>
               </tr>
             )}

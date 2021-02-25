@@ -1,9 +1,15 @@
 import React, { Fragment } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useHistory } from 'react-router-dom';
 import { config } from "../../config";
 import { currencyFormatter, ratingFormatter, soldFormatter } from '../../utils';
 import ImageLoad from './ImageLoad';
 import Placeholder from '../../assets/images/clip-art/placeholder.png';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import HashLoader from 'react-spinners/HashLoader';
+import Axios from 'axios';
+import Swal from 'sweetalert2';
+import { useEffect } from 'react';
 //TODO Tambah Model Card
 
 export const SkeletonCard = (total) => {
@@ -155,4 +161,84 @@ export const CardList = ({image, name, productId, price, sold, rate}) => {
       </div>
     </Fragment>
   )
+}
+
+export const OrderCard = ({ productId, name, image, price, orderAmount, totalProductPrice, weight, onClick, orderId, loading, currProductId, currOrderId, type, trackOpt }) => {
+  const [btnContent, setBtnContent] = useState('');
+
+  useEffect(() => {
+    switch (trackOpt) {
+      case 1:
+        switch (type) {
+          case "seller":
+            setBtnContent('Confirm Order');
+            break;
+            
+          default:
+            setBtnContent('Buy again')
+            break;
+        }
+        break;
+      case 2:
+        switch (type) {
+          case "seller":
+            setBtnContent('Ready To Go');
+            break;
+        
+          default:
+            setBtnContent('Buy again')
+            break;
+        }
+        break;
+      case 3:
+        switch (type) {
+          case "seller":
+            setBtnContent('already shipped');
+            break;
+        
+          default:
+            setBtnContent('Buy again')
+            break;
+        }
+        break;
+      
+      default:
+        break;
+    }
+  }, [trackOpt])
+
+  return (
+    <Fragment>
+      <div className="order-card">
+        <div className="order-left">
+          <div className="order-img-wrapper">
+            <ImageLoad placeholder={Placeholder} src={`${config.api_host}/api/image/${image}`} alt="product ico" />
+          </div>
+          <div className="order-info">
+            <p>{name}</p>
+            <div className="order-variant">
+              <div className="product-price" style={{ color: type==="seller" ? '#2000ff' : '' }}>{currencyFormatter(price)}</div>
+              <div className="product-weight">{orderAmount} Product ({weight} gram)</div>
+            </div>
+          </div>
+        </div>
+        <div className="order-right">
+          <div className="total-price">
+            <p>Total Product Price</p>
+            <div className="product-price" style={{ color: type==="seller" ? '#2000ff' : '' }}>{currencyFormatter(totalProductPrice)}</div>
+          </div>
+          {trackOpt===2 && type==="seller" ? 
+          <Fragment>
+            <div className="dest-status-actions">
+              <button className="status-action-btn" disabled={loading} style={{ cursor: loading ? 'not-allowed' : 'pointer', backgroundColor: type==="seller" ? '#0098fe' : '' }} onClick={onClick}>{loading && currProductId === productId ? <HashLoader size="18" color="#fff"/> : btnContent}</button>
+              <button className="destination-info-btn">Destination info</button>
+            </div>
+          </Fragment>
+          :
+          <button disabled={loading} style={{ cursor: loading ? 'not-allowed' : 'pointer', backgroundColor: type==="seller" ? '#0098fe' : '' }} onClick={onClick}>{loading && currProductId === productId ? <HashLoader size="18" color="#fff"/> : btnContent}</button>
+          }
+        </div>
+      </div>
+    </Fragment>
+  );
 }
