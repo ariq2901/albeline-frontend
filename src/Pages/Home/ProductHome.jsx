@@ -124,7 +124,7 @@ const ProductHome = () => {
       );
     },
     dots: true,
-    dotsClass: "slick-dots bp-dots slick-thumb",
+    dotsClass: "slick-dots slick-thumb",
     infinite: false,
     speed: 500,
     slidesToShow: 6,
