@@ -113,7 +113,7 @@ export const Checkout = () => {
   }
 
   const getCost = async (store, store_address, courier, weight) => {
-    const url = `http://localhost:2901/proxy/starter/cost`;
+    const url = `${config.api_rajaongkir}/cost`;
     const headers = {
       key: "11fa41eaf62c64584a90b03a759c5296",
       "Content-Type": "application/json",

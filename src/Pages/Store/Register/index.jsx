@@ -19,7 +19,7 @@ export const Register = () => {
 
   const getCity = async (token) => {
     // own Proxy Server
-    const proxUrl = "http://localhost:2901/proxy/starter/city";
+    const proxUrl = `${config.api_rajaongkir}/city`;
     try {
       let response = await Axios.get(proxUrl, {
         headers: { key: "11fa41eaf62c64584a90b03a759c5296" },

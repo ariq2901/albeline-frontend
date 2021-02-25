@@ -75,7 +75,7 @@ const Detail = (props) => {
 
   const getCity = async (token) => {
     // own Proxy Server
-    const proxUrl = "http://localhost:2901/proxy/starter/city";
+    const proxUrl = `${config.api_rajaongkir}/city`;
     // const url = 'https://cors-anywhere.herokuapp.com/https://api.rajaongkir.com/starter/city';
     try {
       let response = await Axios.get(proxUrl, {
@@ -112,7 +112,7 @@ const Detail = (props) => {
 
   const estOngkir = async () => {
     if (destination) {
-      const url = "http://localhost:2901/proxy/starter/cost";
+      const url = `${config.api_rajaongkir}/cost`;
       const headers = {
         key: "11fa41eaf62c64584a90b03a759c5296",
         "Content-Type": "application/json",
