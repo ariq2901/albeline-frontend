@@ -113,11 +113,7 @@ export const Checkout = () => {
   }
 
   const getCost = async (store, store_address, courier, weight) => {
-    const url = `${config.api_rajaongkir}/cost`;
-    const headers = {
-      key: "11fa41eaf62c64584a90b03a759c5296",
-      "Content-Type": "application/json",
-    }
+    const url = `${config.api_host}/api/cost`;
     const body = {
       origin: store_address,
       destination: cookies.get('user').city_id,
@@ -126,11 +122,10 @@ export const Checkout = () => {
     }
     console.log('body', body);
     try {
-      const response = await Axios.post(url, body, {headers: headers})
-      console.log('response get cost', response)
+      const response = await Axios.post(url, body)
       groupedProducts.map((item) => {
         if (item.store === store) {
-          item.services = response.data.rajaongkir.results[0].costs
+          item.services = response.data.result[0].costs
         }
       })
       setRender(render => render + 1)

@@ -21,6 +21,7 @@ import AuthGuarder from "./Pages/Guarder/AuthGuarder";
 import NotFound from "./Pages/Components/Notfound";
 import Checkout from "./Pages/Buyer/Checkout";
 import User from "./Pages/User";
+import ResetPassword from "./Pages/Credentials/CallbackResetPassword";
 
 function App() {
   return (
@@ -58,6 +59,9 @@ function App() {
           <AuthGuarder path="/cart/checkout">
             <Checkout />
           </AuthGuarder>
+          <Route path="/password/reset/:token/:email" exact>
+            <ResetPassword />
+          </Route>
           <Route>
             <NotFound />
           </Route>

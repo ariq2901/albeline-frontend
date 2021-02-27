@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import firebase from "../../config/firebase";
+import ForgotPassword from "./ForgotPassword";
 import Login from "./Login";
 import Signup from "./Signup";
 
@@ -24,6 +25,10 @@ const Credential = () => {
 
   function toLogin() {
     dispatch({ type: "POPUP_TYPE", popup: "login" });
+  }
+
+  function toForgotPassword() {
+    dispatch({ type: "POPUP_TYPE", popup: "forgot_password" });
   }
 
   // useEffect(() => {
@@ -57,9 +62,14 @@ const Credential = () => {
   return (
     <div className="login-node" ref={node}>
       {CredentialPopup.popup === "login" ? (
-        <Login onBack={onBack} toSignup={toSignup} />
-      ) : (
+        <Login onBack={onBack} toSignup={toSignup} toForgotPassword={toForgotPassword} />
+      ) : CredentialPopup.popup === "signup" ? (
         <Signup onBack={onBack} toLogin={toLogin} />
+      ) : (
+        <Fragment>
+          {console.log('masuk sini')}
+          <ForgotPassword onBack={onBack} toLogin={toLogin} />
+        </Fragment>
       )}
     </div>
   );

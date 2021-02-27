@@ -122,7 +122,7 @@ const Quickview = () => {
               <div className="quickview-info">
                 <div className="quickview-name"><span>{product.name}</span></div>
                 <div className="quickview-scale">
-                  <div className="quickview-rating">{ratingFormatter(product.rate)}</div>
+                  <div className="quickview-rating" style={ product.rate===null ? { width: '50%', display: 'flex', alignItems: 'center', fontFamily: "Roboto-Regular", fontSize: '13px', color: 'var(--secondary-color)' } : null}>{ratingFormatter(product.rate)}</div>
                   <div className="quickview-sold">{soldFormatter(product.sold)}</div>
                 </div>
                 <div className="quickview-price-title">Our Price</div>

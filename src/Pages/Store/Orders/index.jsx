@@ -9,7 +9,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { config } from '../../../config';
 import Cookie from 'universal-cookie';
 import Axios from 'axios';
-import { useRef } from 'react';
 var cookies = new Cookie();
 
 const Order = () => {
@@ -20,7 +19,8 @@ const Order = () => {
   const [order_id, setOrder_id] = useState(0);
   const [loading, setLoading] = useState(false);
   const [render, setRender] = useState(0);
-  let node = useRef();
+  const [popup, setPopup] = useState(false);
+  const [popupData, setPopupData] = useState([]);
 
   const getTrack = async (unmounted, token) => {
     let url = `${config.api_host}/api/orders/${trackopt}`;
@@ -80,7 +80,6 @@ const Order = () => {
 
   return (
     <Fragment>
-      {console.log('trackopt', trackopt)}
       <section className="track-sect">
         <div className="container">
           <div className="track-box">
@@ -107,26 +106,40 @@ const Order = () => {
             <div className="order-list">
               {packages.map((order, i) =>
                 <Fragment key={i}>
-                  <OrderCard key={i} productId={order.product.id} image={order.product.images[0].id} name={order.product.name} price={order.product.price} orderAmount={order.order_amount} totalProductPrice={order.total_product_price} weight={order.product.weight} onClick={() => handleOrderStatus(order.id, parseInt(order.status) + 1)} loading={loading} orderId={order.id} currOrderId={order_id} type="seller" trackOpt={trackopt} />
+                  <OrderCard key={i} productId={order.product.id} image={order.product.images[0].id} name={order.product.name} price={order.product.price} orderAmount={order.order_amount} totalProductPrice={order.total_product_price} weight={order.product.weight} onClick={() => handleOrderStatus(order.id, parseInt(order.status) + 1)} loading={loading} orderId={order.id} currOrderId={order_id} type="seller" trackOpt={trackopt} onPopup={() => {setPopup(true); setPopupData(order.user)}} />
                 </Fragment>
               )}
             </div>
           </div>
         </div>
+      {console.log('popupData', popupData)}
       </section>
 
       {/*^ Destination Popup */}
-      <div className="destination-info-popup" ref={node}>
+      {popup && 
+      <div className="destination-info-popup">
         <div className="destination-info">
+        <button onClick={() => setPopup(false)}><i class="fas fa-times"></i></button>
           <div className="destination-vector">
             <img src={Destination} alt="vector"/>
           </div>
           <div className="destination-detail">
-            <div className="info-label"></div>
-            <div className="info-detail"></div>
+            <div className="info-label">
+              <p>Name</p>
+              <p>Phone</p>
+              <p>Address</p>
+              <p>City</p>
+            </div>
+            <div className="info-detail">
+              <p>{popupData.name}</p>
+              <p>{popupData.hp}</p>
+              <p>{popupData.address}</p>
+              <p>{popupData.city_name}</p>
+            </div>
           </div>
         </div>
       </div>
+      }
     </Fragment>
   )
 }

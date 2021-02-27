@@ -75,23 +75,23 @@ const Detail = (props) => {
 
   const getCity = async (token) => {
     // own Proxy Server
-    const proxUrl = `${config.api_rajaongkir}/city`;
+    const proxUrl = `${config.api_host}/api/cities`;
     // const url = 'https://cors-anywhere.herokuapp.com/https://api.rajaongkir.com/starter/city';
     try {
       let response = await Axios.get(proxUrl, {
-        headers: { key: "11fa41eaf62c64584a90b03a759c5296" },
+        // headers: { key: "11fa41eaf62c64584a90b03a759c5296" },
         cancelToken: token,
       });
 
       await new Promise((resolve, reject) => setTimeout(resolve, 3000));
 
-      var contain = response.data.rajaongkir.results.map((result) => ({
+      var contain = response.data.cities.map((result) => ({
         value: result.city_id,
         label: result.city_name,
         province: result.province,
       }));
 
-      var provinsi = response.data.rajaongkir.results.map((result) => ({
+      var provinsi = response.data.cities.map((result) => ({
         label: result.province,
       }));
 
@@ -112,11 +112,11 @@ const Detail = (props) => {
 
   const estOngkir = async () => {
     if (destination) {
-      const url = `${config.api_rajaongkir}/cost`;
-      const headers = {
-        key: "11fa41eaf62c64584a90b03a759c5296",
-        "Content-Type": "application/json",
-      };
+      const url = `${config.api_host}/api/cost`;
+      // const headers = {
+      //   key: "11fa41eaf62c64584a90b03a759c5296",
+      //   "Content-Type": "application/json",
+      // };
       const body = {
         origin: origin.value,
         destination: destination.value,
@@ -125,9 +125,9 @@ const Detail = (props) => {
       };
       console.log("body", body);
       try {
-        let response = await Axios.post(url, body, { headers: headers });
+        let response = await Axios.post(url, body);
         console.log("ONGKIR ", response);
-        setOngkir(response.data.rajaongkir.results[0].costs[0].cost[0].value);
+        setOngkir(response.data.result[0].costs[0].cost[0].value);
       } catch (e) {
         console.error("Failure: " + e);
       }
@@ -390,7 +390,7 @@ const Detail = (props) => {
                   </div>
                   <div className="detail-action">
                     <button
-                      className="detail-addtocart"
+                      className="detail-addtocart ripple"
                       onClick={() => handleCart(product.id)}
                       disabled={loading}
                       style={{ cursor: loading ? 'not-allowed' : 'pointer' }}

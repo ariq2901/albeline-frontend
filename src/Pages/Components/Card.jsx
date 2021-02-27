@@ -163,7 +163,7 @@ export const CardList = ({image, name, productId, price, sold, rate}) => {
   )
 }
 
-export const OrderCard = ({ productId, name, image, price, orderAmount, totalProductPrice, weight, onClick, orderId, loading, currProductId, currOrderId, type, trackOpt }) => {
+export const OrderCard = ({ productId, name, image, price, orderAmount, totalProductPrice, weight, onClick, orderId, loading, currProductId, currOrderId, type, trackOpt, onPopup, onReview }) => {
   const [btnContent, setBtnContent] = useState('');
 
   useEffect(() => {
@@ -193,11 +193,22 @@ export const OrderCard = ({ productId, name, image, price, orderAmount, totalPro
       case 3:
         switch (type) {
           case "seller":
-            setBtnContent('already shipped');
+            setBtnContent('waiting for confirmation of received order');
             break;
         
           default:
-            setBtnContent('Buy again')
+            setBtnContent('confirm arrived order');
+            break;
+        }
+        break;
+      case 4:
+        switch (type) {
+          case "seller":
+            setBtnContent('order finish');
+            break;
+        
+          default:
+            setBtnContent('leave a review');
             break;
         }
         break;
@@ -206,6 +217,13 @@ export const OrderCard = ({ productId, name, image, price, orderAmount, totalPro
         break;
     }
   }, [trackOpt])
+
+  const disabledBtn = {
+    width: '60%',
+    backgroundColor: '#e7e7e7',
+    color: '#8e8e8e',
+    cursor: 'not-allowed'
+  }
 
   return (
     <Fragment>
@@ -217,7 +235,7 @@ export const OrderCard = ({ productId, name, image, price, orderAmount, totalPro
           <div className="order-info">
             <p>{name}</p>
             <div className="order-variant">
-              <div className="product-price" style={{ color: type==="seller" ? '#2000ff' : '' }}>{currencyFormatter(price)}</div>
+              <div className="product-price" style={{ color: type==="seller" ? '#ef3700' : '' }}>{currencyFormatter(price)}</div>
               <div className="product-weight">{orderAmount} Product ({weight} gram)</div>
             </div>
           </div>
@@ -225,17 +243,26 @@ export const OrderCard = ({ productId, name, image, price, orderAmount, totalPro
         <div className="order-right">
           <div className="total-price">
             <p>Total Product Price</p>
-            <div className="product-price" style={{ color: type==="seller" ? '#2000ff' : '' }}>{currencyFormatter(totalProductPrice)}</div>
+            <div className="product-price" style={{ color: type==="seller" ? '#ef3700' : '' }}>{currencyFormatter(totalProductPrice)}</div>
           </div>
-          {trackOpt===2 && type==="seller" ? 
-          <Fragment>
-            <div className="dest-status-actions">
-              <button className="status-action-btn" disabled={loading} style={{ cursor: loading ? 'not-allowed' : 'pointer', backgroundColor: type==="seller" ? '#0098fe' : '' }} onClick={onClick}>{loading && currProductId === productId ? <HashLoader size="18" color="#fff"/> : btnContent}</button>
-              <button className="destination-info-btn">Destination info</button>
-            </div>
-          </Fragment>
-          :
-          <button disabled={loading} style={{ cursor: loading ? 'not-allowed' : 'pointer', backgroundColor: type==="seller" ? '#0098fe' : '' }} onClick={onClick}>{loading && currProductId === productId ? <HashLoader size="18" color="#fff"/> : btnContent}</button>
+          {
+            trackOpt===4 && type==="seller" ?
+            (
+              <span class="badge bg-success text-white d-flex align-items-center justify-content-center" style={{ width: '20%', height: '20px' }}>order done</span>
+            ) : trackOpt===4 && type==="buyer" ? (
+              <Fragment>
+                <button className="status-action-btn" disabled={loading} style={{ width: '50%' }} onClick={onReview}>{btnContent}</button>  
+              </Fragment>
+            ) : trackOpt===2 && type==="seller" ? (
+              <Fragment>
+                <div className="dest-status-actions">
+                  <button className="status-action-btn" disabled={loading} style={{ cursor: loading ? 'not-allowed' : 'pointer', backgroundColor: type==="seller" ? '#fe9800' : '' }} onClick={onClick}>{ loading && currOrderId === orderId ? <HashLoader size="18" color="#fff"/> : btnContent}</button>
+                  <button className="destination-info-btn" onClick={onPopup}>Destination info</button>
+                </div>
+              </Fragment>
+            ) : (
+              <button className="status-action-btn" disabled={loading || trackOpt===3 && type==="seller"} style={ trackOpt===3 && type==="seller" ? disabledBtn : { width: '50%', cursor: loading ? 'not-allowed' : 'pointer', backgroundColor: type==="seller" ? '#fe9800' : '' }} onClick={onClick}>{loading && currProductId === productId || loading && currOrderId === orderId ? <HashLoader size="18" color="#fff"/> : btnContent}</button>
+            )
           }
         </div>
       </div>

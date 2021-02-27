@@ -7,7 +7,7 @@ const RatingPicker = () => {
   return (
     <Fragment>
       {console.log('rate', rate)}
-      <Rating onChange={e => setRate(e)} emptySymbol="far fa-star" fullSymbol="fas fa-star" fractions={2}/>
+      <Rating onChange={e => setRate(e)} emptySymbol="far fa-star white-text" fullSymbol="fas fa-star" fractions={2}/>
     </Fragment>
   )
 }

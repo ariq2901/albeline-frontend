@@ -6,6 +6,7 @@ import { CustomArrow } from '../Components/SliderCustomized';
 import { config } from '../../config';
 import Axios from 'axios';
 import ImageLoad from '../Components/ImageLoad';
+import PulseLoader from 'react-spinners/PulseLoader';
 import Placeholder from '../../assets/images/placeholder.jpg';
 import { useHistory } from 'react-router-dom';
 
@@ -13,7 +14,8 @@ const Header = () => {
   const [bigBanner, setBigBanner] = useState([]);
   const [smallBanner, setSmallBanner] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [id, setId] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [loop, setLoop] = useState([1,2,3,4,5]);
   let history = useHistory()
 
   const getCategories = async (unmounted, token) => {
@@ -37,9 +39,15 @@ const Header = () => {
   }
 
   useEffect(() => {
-    getBigBanner();
-    getSmallBanner();
-  }, [id]);
+    let unmounted = false;
+    let source = Axios.CancelToken.source();
+    getBigBanner(unmounted, source.token);
+
+    return () => {
+      unmounted = true;
+      source.cancel('cleaning up request');
+    }
+  }, []);
 
   useEffect(() => {
     let unmounted = false;
@@ -52,50 +60,24 @@ const Header = () => {
     }
   }, []);
 
-  function getBigBanner() {
+  async function getBigBanner(unmounted, token) {
     const url = `${config.api_host}/api/banners/big`;
-    console.log(url);
-    Axios.get(url)
-    .then(res => {
-      setBigBanner(res.data.banners);
-    })
-    .catch(e => {
-      console.error(e);
-    });
-  }
-  
-  async function getSmallBanner() {
+    setLoading(true)
     try {
-      const url = `${config.api_host}/api/banners/small`;
-      const res = await Axios.get(url);
-      setSmallBanner(res.data.banners);
-    } catch(e) {
-      console.error("Failure ", e);
+      const response = await Axios.get(url, {cancelToken: token});
+      if (!unmounted) {
+        setBigBanner(response.data.banners);
+      }
+      setLoading(false)
+    } catch (error) {
+      if (Axios.isCancel(error)) {
+        console.error('request cancelled', error);
+      } else {
+        console.error('another error happened', error);
+      }
+      setLoading(false)
     }
   }
-
-  // var settings = {
-  //   customPaging: function(i) {
-  //     return (
-  //       <a>
-  //         <div className="strip-slick-dots"></div>
-  //       </a>
-  //     );
-  //   },
-  //   className: "center",
-  //   centerMode: true,
-  //   centerPadding: "60px",
-  //   dots: true,
-  //   dotsClass: "slick-dots banner-dots slick-thumb",
-  //   infinite: true,
-  //   slidesToShow: 1,
-  //   slidesToScroll: 1,
-  //   autoplay: true,
-  //   speed: 500,
-  //   autoplaySpeed: 5000,
-  //   nextArrow: <CustomArrow prev={false} />,
-  //   prevArrow: <CustomArrow prev={true}/>,
-  // };
 
   const settings = {
     className: "center",
@@ -124,19 +106,25 @@ const Header = () => {
       <section className="home-header">
         <div className="container">
           <div className="content-header">
-            {/* <div className="rest-content-item">
-              {smallBanner.map((image, i) =>
-                <div className="small-banner-wrapper" key={i} style={{ backgroundImage: `url(${config.api_host}/api/image/${image.image.id})` }}></div>
-                )}
-              </div> */}
             <Slider {...settings} className="content3-item">
-              {bigBanner.map((image, i) =>
+              {
+                loading ?
+                loop.map((l,i) => 
+                <div className="big-banner-wrapper" key={i}>
+                  <div className="big-banner h-100 d-flex justify-content-center align-items-center" style={{ background: "linear-gradient(to right, #ddd, #eee)" }}>
+                    <PulseLoader color="#ff581a" size="12" />
+                  </div>
+                </div>
+                )
+                :
+                bigBanner.map((image, i) =>
                 <div key={i} className="big-banner-wrapper">
                   <div className="big-banner">
                     <ImageLoad placeholder={Placeholder} src={`${config.api_host}/api/image/${image.image.id}`} alt="banner"/>
                   </div>
                 </div>
-              )}
+                )
+              }
             </Slider>
           </div>
           <div className="category-grid-ico">

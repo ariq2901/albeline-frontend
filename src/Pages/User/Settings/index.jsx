@@ -61,7 +61,7 @@ const Settings = () => {
       if(!unmounted) {
         setUser(response.data.user);
         setUserImage(response.data.user.image.id);
-        cookies.set('user', response.data.user, {path: '/'});
+        cookies.set('user', response.data.user);
         console.log('response user', response);
         setLoading(false);
       }
@@ -80,23 +80,22 @@ const Settings = () => {
 
   const getCity = async (token, unmounted) => {
     // own Proxy Server
-    const proxUrl = `${config.api_rajaongkir}/city`;
+    const proxUrl = `${config.api_host}/api/cities`;
     try {
       let response = await Axios.get(proxUrl, {
-        headers: { key: "11fa41eaf62c64584a90b03a759c5296" },
+        // headers: { key: "11fa41eaf62c64584a90b03a759c5296" },
         cancelToken: token,
       });
       if (!unmounted) { 
-        var contain = response.data.rajaongkir.results.map((result) => ({
-          value: result.city_id,
-          label: result.city_name,
-          province: result.province,
+        var contain = response.data.cities.map((city) => ({
+          value: city.city_id,
+          label: city.city_name,
+          province: city.province,
         }));
         setAllCity(contain);
-        console.log('contain', contain);
         
-        var provinsi = response.data.rajaongkir.results.map((result) => ({
-          label: result.province,
+        var provinsi = response.data.cities.map((city) => ({
+          label: city.province,
         }));
         
         removeDuplicate(provinsi, contain);

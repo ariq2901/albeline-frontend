@@ -7,7 +7,7 @@ import PulseLoader from 'react-spinners/PulseLoader';
 import { config } from "../../../config";
 var cookies = new Cookie();
 
-const Login = ({ onBack, toSignup }) => {
+const Login = ({ onBack, toSignup, toForgotPassword }) => {
   const CredentialPopup = useSelector((state) => state.CredentialPopup);
   const [vermethod, setVermethod] = useState("email");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -137,6 +137,9 @@ const Login = ({ onBack, toSignup }) => {
                 </div>
               <button className="submit-signin" type="submit" disabled={loading}>{loading ? <PulseLoader color="#ffffff" size="8" loading={loading} /> : "Log In"}</button>
               </form>
+              <div onClick={toForgotPassword} className="forgot-link">
+                <div>Forgot your password?</div>
+              </div>
             </div>
           </div>
         </div>

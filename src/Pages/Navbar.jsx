@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { Link, NavLink, Redirect, useHistory } from "react-router-dom";
 import Loader from 'react-spinners/BeatLoader';
-import Logo from "../assets/images/Logo.svg";
+import Logo from "../assets/images/Logo.png";
 import SignoutIco from "../assets/images/icons/signout.jpg";
 import SearchIco from "../assets/images/icons/search-ico.webp";
 import Cookies from "universal-cookie";
