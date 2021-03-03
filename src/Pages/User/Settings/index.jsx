@@ -192,6 +192,9 @@ const Settings = () => {
     if (inputprofile.length > 0) {
       body = {...body, profile: inputprofile}
     }
+    if (inputemail.length > 0) {
+      body = {...body, profile: inputemail}
+    }
 
     Axios.post(url, body, {headers: header})
     .then(() => {
@@ -268,7 +271,7 @@ const Settings = () => {
                       :
                         <Fragment>
                           {user.name ? <h4>{user.name}</h4> : <h5>Oops... let's fill your name</h5>}
-                          {user.email ? <span className="profile-email mt-2">{user.email}</span> : <Fragment><input type="email" onChange={e => {emailValidation(e.target.value); setInputemail(e.target.value)}} className="email-profile-input"/><span>{inputemail !== '' ? validMail.toString() : null}</span></Fragment>}
+                          {user.email ? <span className="profile-email mt-2">{user.email}</span> : <Fragment><input type="email" placeholder="email address" onChange={e => {emailValidation(e.target.value); setInputemail(e.target.value)}} className="email-profile-input"/><span>{inputemail !== '' ? validMail.toString() : null}</span></Fragment>}
                         </Fragment>
                     }
                   </div>

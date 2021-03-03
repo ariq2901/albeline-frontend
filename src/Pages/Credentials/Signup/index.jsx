@@ -180,7 +180,6 @@ const Signup = ({ onBack, toLogin }) => {
         dispatch({type: 'CREDENTIAL_POPUP', open: false});
       }
     } catch(e) {
-      console.log('e.response.data', e.response.data)
       if(e.response) {
         Swal.fire({icon: 'error', title: `Ooops... an error occured`});
       } else {
