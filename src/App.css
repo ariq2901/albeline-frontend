@@ -4273,7 +4273,7 @@ form#imageform {
 }
 
 .gs-img-wrap {
-  width: 50%;
+  width: 60%;
 }
 
 .gs-vector img {
@@ -5264,6 +5264,25 @@ section.reset-sect {
   left: 9.2%;
 }
 /* End Reset Password */
+
+/*^ getting-started */
+.getting-started {
+  padding: 0 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.getting-started button {
+  width: 100%;
+  height: 40px;
+  border: none;
+  color: #fff;
+  font-family: 'Nunito-SemiBold';
+  font-size: 17px;
+  background-color: var(--secondary-color);
+}
+/* end getting-started */
 
 /*^ Footer */
 body {
