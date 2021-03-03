@@ -22,6 +22,7 @@ import NotFound from "./Pages/Components/Notfound";
 import Checkout from "./Pages/Buyer/Checkout";
 import User from "./Pages/User";
 import ResetPassword from "./Pages/Credentials/CallbackResetPassword";
+import Footer from "./Pages/Components/Footer";
 
 function App() {
   return (
@@ -66,6 +67,7 @@ function App() {
             <NotFound />
           </Route>
         </Switch>
+        <Footer />
       </Router>
       {/* <PushNotification /> */}
       <Credential />

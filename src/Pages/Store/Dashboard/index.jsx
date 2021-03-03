@@ -9,7 +9,7 @@ const cookies = new Cookie();
 
 const Dashboard = () => {
   const [totalReviews, setTotalReviews] = useState();
-  const [totalProducts, setTotalProducts] = useState();
+  const [totalProducts, setTotalProducts] = useState([]);
   const [popup, setPopup] = useState(false);
   let history = useHistory();
   let query = useQuery();
@@ -27,7 +27,7 @@ const Dashboard = () => {
 
       const response2 = await Axios.get(url2, {headers: header, cancelToken: token});
       if (!unmounted) {
-        setTotalProducts(response2.data.data.total);
+        setTotalProducts(response2.data.data);
       }
     } catch (e) {
       if (!unmounted) {
@@ -67,19 +67,19 @@ const Dashboard = () => {
         </div>
         <div className="stats-space">
           <div className="stats-card">
-            <h4>{totalProducts}</h4>
+            <h4>{totalProducts.total}</h4>
             <span>Total Products</span>
             <button onClick={() => history.push('/seller/products')}>Your Products</button>
           </div>
           <div className="stats-card">
             <h4>{totalReviews}</h4>
             <span>Total Reviews</span>
-            <button>Your Products</button>
+            <button onClick={() => history.push('/seller/products')}>Your Products</button>
           </div>
           <div className="stats-card">
-            <h4>42</h4>
-            <span>Total Products</span>
-            <button>Your Products</button>
+            <h4>{totalProducts.total_sold}</h4>
+            <span>Products Sold</span>
+            <button onClick={() => history.push('/seller/products')}>Your Products</button>
           </div>
         </div>
         <div className="action-space">

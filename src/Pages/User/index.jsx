@@ -3,11 +3,12 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Menu from './Menu';
 import Settings from './Settings';
 import Track from './Tracking';
+import Wishlist from './Wishlist';
 
 export const User = () => {
   return (
     <Fragment>
-      <div className="overlay-popup">
+      <div className="overlay-popup" style={{ paddingBottom: '50px' }}>
         <section className="seller">
           <div className="container">
             <div className="seller-page">
@@ -22,6 +23,9 @@ export const User = () => {
 
                     <Route path="/user/track">
                       <Track />
+                    </Route>
+                    <Route path="/user/wishlist">
+                      <Wishlist />
                     </Route>
 
                   </Switch>

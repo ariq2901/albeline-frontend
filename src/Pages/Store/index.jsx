@@ -8,6 +8,7 @@ import Dashboard from './Dashboard';
 import Menu from './Menu';
 import Order from './Orders';
 import Products from './Products';
+import Settings from './Settings';
 
 export const Seller = () => {
   return (
@@ -43,6 +44,10 @@ export const Seller = () => {
 
                     <Route path="/seller/edit-product/:id">
                       <Edit />
+                    </Route>
+
+                    <Route path="/seller/settings">
+                      <Settings />
                     </Route>
 
                   </Switch>

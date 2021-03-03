@@ -12,7 +12,6 @@ import { useHistory } from 'react-router-dom';
 
 const Header = () => {
   const [bigBanner, setBigBanner] = useState([]);
-  const [smallBanner, setSmallBanner] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loop, setLoop] = useState([1,2,3,4,5]);
@@ -90,6 +89,15 @@ const Header = () => {
     autoplaySpeed: 4000,
     nextArrow: <CustomArrow prev={false} />,
     prevArrow: <CustomArrow prev={true}/>,
+    responsive: [{
+      breakpoint: 700,
+      settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        initialSlide: 1,
+        centerPadding: "0px",
+      }
+    }]
   };
 
   var settings2 = {
@@ -98,6 +106,15 @@ const Header = () => {
     slidesToScroll: 1,
     nextArrow: <CustomArrow prev={false} />,
     prevArrow: <CustomArrow prev={true}/>,
+    initialSlide: 0,
+    responsive: [{
+      breakpoint: 700,
+      settings: {
+        slidesToShow: 5,
+        slidesToScroll: 1,
+        initialSlide: 5
+      }
+    }]
   };
   
   return (

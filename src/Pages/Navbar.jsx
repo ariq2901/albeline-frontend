@@ -258,7 +258,7 @@ const Navbar = () => {
                 </div>
               </div>
               {login === undefined ? (
-                <button className="nav-login-btn ripple" onClick={() => {setClicked(true);loginPopup(true);}} > Login </button>
+                <button className="nav-login-btn" onClick={() => {setClicked(true);loginPopup(true);}} > Login </button>
               ) : (
                 <Fragment>
                   <NavLink className="cart" to="/cart">
@@ -267,9 +267,9 @@ const Navbar = () => {
                     ) : null}
                     <i className="bi bi-cart2"></i>
                   </NavLink>
-                  <div className="wishlist">
+                  <NavLink to="/user/wishlist" className="wishlist">
                     <i class="bi bi-heart"></i>
-                  </div>
+                  </NavLink>
                   <button className="account">
                     <div ref={node} className={menu ? "menu" : "menu hide"}>
                       <div className="user-banner">
@@ -285,7 +285,6 @@ const Navbar = () => {
                         </div>
                         <div className="more">
                           <Link to="/user/track">Track Your Order</Link>
-                          <Link to="/user/history">Purchase History</Link>
                           <Link to="/user/wishlist">Wishlist</Link>
                           <Link to="/user/settings">Settings</Link>
                           <div className="signout" onClick={logout}>Sign out <img src={SignoutIco} alt="ico"/></div>

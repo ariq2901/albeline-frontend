@@ -127,7 +127,7 @@ export const Register = () => {
 
   return (
     <Fragment>
-      <section className="op-shop">
+      <section className="op-shop" style={{ paddingBottom: '50px' }}>
         <div className="container">
           <div className="open-shop-grid">
             <div className="vector-art">

@@ -33,8 +33,8 @@ const Login = ({ onBack, toSignup, toForgotPassword }) => {
           let response = await Axios.post(url, body);
           dispatch({type: 'CREDENTIAL_POPUP', open: false});
           console.log('response Login', response);
-          cookies.set('user_token', response.data.data.token.token);
-          cookies.set('login', true);
+          cookies.set('user_token', response.data.data.token.token, {path: '/'});
+          cookies.set('login', true, {path: '/'});
           const token = response.data.data.token.token;
           getUser(token);
         } catch(e) {
@@ -56,8 +56,8 @@ const Login = ({ onBack, toSignup, toForgotPassword }) => {
         try {
           let response = await Axios.post(url, body);
           dispatch({type: 'CREDENTIAL_POPUP', open: false});
-          cookies.set('user_token', response.data.data.token.token);
-          cookies.set('login', true);
+          cookies.set('user_token', response.data.data.token.token, {path: '/'});
+          cookies.set('login', true, {path: '/'});
           const token = response.data.data.token.token;
           getUser(token);
         } catch(e) {
@@ -74,7 +74,7 @@ const Login = ({ onBack, toSignup, toForgotPassword }) => {
     setLoading(true);
     try {
       const response = await Axios.get(url, {headers: {'Authorization': `Bearer `.concat(token)}});
-      cookies.set('user', response.data.user);
+      cookies.set('user', response.data.user, {path: '/'});
       setLoading(false);
       dispatch({type: "SET_RENDER"});
       dispatch({type: "CART_RENDER"});

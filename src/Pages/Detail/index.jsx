@@ -1,5 +1,6 @@
 import { currencyFormatter, inStockFormatter, ratingFormatter, ratingTextFormatter, soldFormatter, } from "../../utils";
 import StarRound from "../../assets/images/clip-art/star-round-icon.svg";
+import Placeholder from '../../assets/images/clip-art/placeholder.png';
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { CustomArrow } from "../Components/SliderCustomized";
 import { useParams, withRouter } from "react-router-dom";
@@ -10,9 +11,10 @@ import Cookies from "universal-cookie";
 import { config } from "../../config";
 import Select from "react-select";
 import Slider from "react-slick";
-import PulseLoader from 'react-spinners/PulseLoader'
+import PulseLoader from 'react-spinners/PulseLoader';
 import Axios from "axios";
 import Swal from "sweetalert2";
+import ImageLoad from "../Components/ImageLoad";
 
 const cookies = new Cookies();
 
@@ -42,10 +44,13 @@ const Detail = (props) => {
   });
   const [isDisplay, setIsDisplay] = useState(false);
   const [berat, setBerat] = useState(1000);
-  const [origin, setOrigin] = useState({ name: "Jakarta Barat", value: "151" });
+  const [origin, setOrigin] = useState(152);
   const [courier, setCourier] = useState("jne");
   const [ongkir, setOngkir] = useState(0);
+  const [render, setRender] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [loadingCost, setLoadingCost] = useState(false);
+  const [loadingWishlist, setLoadingWishlist] = useState(false);
   const cart = cookies.get("cart");
   const arr = [product];
 
@@ -62,6 +67,7 @@ const Detail = (props) => {
         console.log("response", response);
         setReviews(response.data.product.reviews);
         setStore(response.data.product.store);
+        setOrigin(response.data.product.store.city_id);
         setProduct(response.data.product);
         setImages(response.data.product.image);
       } catch (e) {
@@ -105,10 +111,8 @@ const Detail = (props) => {
   };
 
   useEffect(() => {
-    if (prevDestination !== destination) {
-      estOngkir();
-    }
-  }, [destination]);
+    estOngkir();
+  }, [render]);
 
   const estOngkir = async () => {
     if (destination) {
@@ -118,12 +122,13 @@ const Detail = (props) => {
       //   "Content-Type": "application/json",
       // };
       const body = {
-        origin: origin.value,
+        origin: origin,
         destination: destination.value,
         weight: berat,
         courier: courier,
       };
       console.log("body", body);
+      setLoadingCost(true)
       try {
         let response = await Axios.post(url, body);
         console.log("ONGKIR ", response);
@@ -131,6 +136,7 @@ const Detail = (props) => {
       } catch (e) {
         console.error("Failure: " + e);
       }
+      setLoadingCost(false)
     }
   };
 
@@ -158,6 +164,7 @@ const Detail = (props) => {
 
   const handleSelect = (destination) => {
     setDestination(destination);
+    setRender(render => render + 1);
   };
 
   const handleClick = (e) => {
@@ -172,56 +179,24 @@ const Detail = (props) => {
     setIsDisplay(!isDisplay);
   };
 
-  const existCheck = () => {
-    if (cart !== undefined) {
-      const checker = cart.map((crt) => {
-        console.log("crt", crt.name);
-        if (crt.name === product.name) {
-          return false;
-        }
-      });
-      if (checker.includes(false)) {
-        return false;
-      }
-    }
-  };
-
-  // const addToCart = () => {
-  //   const check = existCheck();
-  //   const toCookie = {};
-  //   toCookie["id"] = product.id;
-  //   toCookie["name"] = product.name;
-  //   toCookie["harga"] = product.harga;
-  //   toCookie["sold"] = product.sold;
-  //   toCookie["image"] = product.image[0];
-  //   toCookie["amount"] = 1;
-
-  //   console.log("toCookie", toCookie);
-  //   if (check === false) {
-  //     return false;
-  //   }
-  //   if (cart !== undefined) {
-  //     cookies.set("cart", [toCookie, ...cart]);
-  //     return;
-  //   } else {
-  //     cookies.set("cart", [toCookie]);
-  //   }
-  // };
-
   const handleCart = async (id) => {
-    const url = `${config.api_host}/api/get-cart`;
-    const header = { 'Authorization': `Bearer ${cookies.get('user_token')}` }
-    setLoading(true);
-    try {
-      const response = await Axios.get(url, { headers: header });
-      var list_cart = response.data.data.products;
+    if (cookies.get('user_token')) {
+
+      const url = `${config.api_host}/api/get-cart`;
+      const header = { 'Authorization': `Bearer ${cookies.get('user_token')}` }
+      setLoading(true);
+      try {
+        const response = await Axios.get(url, { headers: header });
+        var list_cart = response.data.data.products;
       addToCart(id, list_cart);
-    } catch (error) {
-      console.error(error.message);
-      if (error.response.status === 401) {
-        Swal.fire({icon: 'warning', title: 'Unauthorized', text: 'Please login first'});
+      } catch (error) {
+        if (error.response.status === 401) {
+          Swal.fire({icon: 'warning', title: 'Unauthorized', text: 'Please login first'});
+        }
+        setLoading(false)
       }
-      setLoading(false)
+    } else {
+      Swal.fire({icon: 'warning', title: 'Login first', text: 'You must be logged in to add your cart'})
     }
   }
 
@@ -250,6 +225,27 @@ const Detail = (props) => {
         console.error(error.message);
         setLoading(false)
       }
+    }
+  }
+
+  const addWishlist = async () => {
+    if (cookies.get('user_token')) {
+      const url = `${config.api_host}/api/add-wishlist/${product.id}`;
+      const header = {'Authorization': `Bearer ${cookies.get('user_token')}`}
+
+      setLoadingWishlist(true)
+      try {
+        await Axios.get(url, {headers: header});
+        Swal.fire({icon: 'success', title: 'Success', text: 'Success adding to your wishlist'})
+      } catch (error) {
+        if (error.response.status === 422) {
+          Swal.fire({icon: 'warning', title: 'Added last time', text: 'You\'ve been added this product to your wishlist last time'})
+        }
+        Swal.fire({icon: 'error', title: 'Oops...', text: 'An error occured. Try again later'})
+      }
+      setLoadingWishlist(false)
+    } else {
+      Swal.fire({icon: 'warning', title: 'Login first', text: 'You must be logged in to add your wishlist'})
     }
   }
 
@@ -405,18 +401,13 @@ const Detail = (props) => {
                         </Fragment>
                       }
                     </button>
-                    <div className="detail-whislist">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="25"
-                        height="25"
-                        fill="currentColor"
-                        className="bi bi-heart"
-                        viewBox="0 0 16 16"
-                      >
-                        <path d="M8 2.748l-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
-                      </svg>
-                    </div>
+                    <button className="detail-wishlist" onClick={addWishlist}>
+                      {loadingWishlist ? <PulseLoader size="8px" color="var(--primary-color)" /> : 
+                        <svg xmlns="http://www.w3.org/2000/svg"width="25"height="25"fill="currentColor"className="bi bi-heart" viewBox="0 0 16 16">
+                          <path d="M8 2.748l-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
+                        </svg>
+                      }
+                    </button>
                   </div>
                 </div>
               </div>
@@ -425,8 +416,9 @@ const Detail = (props) => {
               <div className="inner-box">
                 <div className="box-toko">
                   <div className="img-toko">
-                    <img
+                    <ImageLoad
                       src={`${config.api_host}/api/image/${store.image}`}
+                      placeholder={Placeholder}
                       alt="toko"
                     />
                   </div>
@@ -465,7 +457,7 @@ const Detail = (props) => {
                       <span>Barang dikirim dari</span>
                     </div>
                     <div className="from-point">
-                      <b>Jakarta Barat</b>
+                      <b>{store.city_name}</b>
                     </div>
                   </div>
                   <div className="to-location">
@@ -475,7 +467,7 @@ const Detail = (props) => {
                     </div>
                     <div className="to-point">
                       <p onClick={handleOpen}>
-                        <b>{currencyFormatter(ongkir)}</b> ke{" "}
+                        {loadingCost ? <PulseLoader size="8" color="var(--primary-color)" /> : <b>{currencyFormatter(ongkir)}</b>} ke{" "}
                         <b>{destination.label}</b>{" "}
                         <i
                           className="fas fa-chevron-down"

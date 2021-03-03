@@ -67,18 +67,14 @@ export const Upload = () => {
           setUploadPercentage(percent)
         }
       }
-
     }
-
     
     fd.append("image", file[0]);
     console.log('imagedata', file[0]);
-    console.log('fd', fd);
-    console.log('e', e);
     setLoading(true);
     
     try {
-      const response = await Axios.post(url, fd, options);
+      await Axios.post(url, fd, options);
       setCurrentUpload(currentUpload => currentUpload + 1);
       setSuccessUpload(successUpload => successUpload + 1);
       setInterval(() => {

@@ -2,70 +2,60 @@ import Axios from 'axios';
 import React, { Fragment, useEffect, useState } from 'react';
 import { config } from '../../config';
 import { useQuery } from '../../utils';
-import { CardList } from '../Components/Card';
+import { CardList, SkeletonCard } from '../Components/Card';
 
 const ListProduct = () => {
 
   const [products, setProducts] = useState([]);
   const [type, setType] = useState('');
   const [filterWindow, setFilterWindow] = useState(false);
-  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [condition, setCondition] = useState('');
   const [filter, setFilter] = useState({});
-  const [checked, setChecked] = useState([]);
-  const [price, setPrice] = useState([]);
+  const [max, setMax] = useState();
+  const [min, setMin] = useState();
   let query = useQuery();
 
   const getProducts = (token, unmounted) => {
+    setLoading(true);
     var url = `${config.api_host}/api/search/products`;
-    if (type !== '') {
-      let body = {sort_by: type};
-      Axios.post(url, body, {cancelToken: token})
-      .then(response => {
-        if(!unmounted) {
-          setProducts(response.data.products);
+    var body = {}
+    if (type !== '' || condition !== '' || min !== undefined || max !== undefined) {
+      if (condition !== '' || min !== undefined || max !== undefined) {
+        if (condition !== '') {
+          body = {...body, condition}
         }
-      })
-      .catch(e => {
-        if(!unmounted) {
-          console.error(e.message);
-          if(Axios.isCancel(e)) {
-            console.log(`request cancelled: ${e.message}`);
-          } else {
-            console.log('Another error happened:' + e.message);
+        if (min !== undefined || max !== undefined) {
+          let prices = {};
+          if (max !== undefined && min !== undefined) {
+            prices = {...prices, min, max}
+            body = {...body, price: prices}
+          }
+          if (min !== undefined) {
+            prices = {...prices, min: min};
+            body = {...body, price: prices}
+          }
+          if (max !== undefined) {
+            prices = {...prices, max: max};
+            body = {...body, price: prices}
           }
         }
-      });
-    } if (filter.length > 0) {
-      let body = {};
-      if (condition !== '') {
-        body = {...body, condition}
       }
-      if (categories.length > 0) {
-        body = {...body, categories}
-      }
-      if (price.length > 0) {
-        body = {...body, price}
-      }
-      console.log('masuk sini');
-      Axios.post(url, body, {cancelToken: token})
-      .then(response => {
-        if(!unmounted) {
-          setProducts(response.data.products);
-        }
-      })
-      .catch(e => {
-        if(!unmounted) {
-          console.error(e.message);
-          if(Axios.isCancel(e)) {
-            console.log(`request cancelled: ${e.message}`);
-          } else {
-            console.log('Another error happened:' + e.message);
-          }
-        }
-      });
-    } else if (type === '' && condition === '') {
 
+      if (type !== '') {
+        body = {...body, sort_by: type};
+      }
+      console.log('body', body)
+      Axios.post(url, body)
+      .then(response => {
+        setProducts(response.data.products);
+        setLoading(false)
+      })
+      .catch(e => {
+        console.error('Another error happened:' + e);
+        setLoading(false)
+      });
+    } else {
       let url = `${config.api_host}/api/products`;
       if (query.get('category')) {
         url = `${config.api_host}/api/category/${query.get('category')}`
@@ -80,6 +70,7 @@ const ListProduct = () => {
             setProducts(response.data.products);
           }
         }
+        setLoading(false)
       })
       .catch(e => {
         if(!unmounted) {
@@ -90,56 +81,25 @@ const ListProduct = () => {
             console.log('Another error happened:' + e.message);
           }
         }
+        setLoading(false)
       });
     }
   }
 
-  const getCategories = async (token, unmounted) => {
-    const url = `${config.api_host}/api/category`;
-
-    try {
-      const response = await Axios.get(url, {cancelToken: token});
-      if (!unmounted) {
-        setCategories(response.data.categories);
+  const handlePrice = (value, type) => {
+    if (type === 'min') {
+      if (value === '') {
+        setMin(undefined);
+        return;
       }
-    } catch (e) {
-      if(!unmounted) {
-        console.error(e.message);
-        if(Axios.isCancel(e)) {
-          console.log(`request cancelled: ${e.message}`);
-        } else {
-          console.log('Another error happened:' + e.message);
-        }
-      }
+      setMin(value);
     }
-  }
-
-  const categoryHandle = (item) => {
-    let itemInt = parseInt(item);
-    if (checked.includes(itemInt)) {
-      setChecked(checked.filter(cat => cat != itemInt));
-    } else {
-      setChecked([...checked, itemInt]);
-    }
-  }
-  
-  const checkHandler = e => {
-    const value = e.target.value;
-    categoryHandle(value);
-  }
-
-  const limitPrice = event => {
-    if (event.target.value > 0) {
-      let value = event.target.value;
-      var name = event.target.id;
-      setPrice({...price, min: value});
-      if (name = 'min') {
-        if (price.includes('min')) {
-          console.log('masuk ops ini');
-        }
-      } else {
-        setPrice({...price, max: value});
+    if (type === 'max') {
+      if (value === '') {
+        setMax(undefined);
+        return;
       }
+      setMax(value);
     }
   }
 
@@ -152,22 +112,15 @@ const ListProduct = () => {
       unmounted = true;
       source.cancel("cancelling in cleanup");
     }
-  }, [type, condition, query.get('category')]);
+  }, [type, condition, min, max, query.get('category')]);
 
-  useEffect(() => {
-    let unmounted = false;
-    let source = Axios.CancelToken.source();
-    getCategories(source.token, unmounted);
-
-    return function() {
-      unmounted = true;
-      source.cancel("cancelling in cleanup");
-    }
-  }, []);
+  const activeBtn = {
+    background: 'var(--secondary-color)',
+    color: '#fff'
+  }
 
   return (
     <Fragment>
-      {console.log('price', price)}
       <div className="overlay-popup">
         <section className="products-sect">
           <div className="container">
@@ -196,47 +149,28 @@ const ListProduct = () => {
               <div className="list-products">
                 <div className={filterWindow ? "filter-window show" : "filter-window hide"}>
                   <div className="conditions">
-                    <button className="new-btn" onClick={e => setCondition(true)}>New</button>
-                    <button className="second-btn" onClick={e => setCondition(false)}>Second</button>
+                    <div className="filter-title">Conditions</div>
+                    <div className="filter-main">
+                      <button className="new-btn" onClick={e => setCondition(true)} style={condition ? activeBtn : null}>New</button>
+                      <button className="second-btn" onClick={e => setCondition(false)} style={ condition===false ? activeBtn : null}>Second</button>
+                    </div>
                   </div>
-                  <div className="categories-opt">
-                    <ul>
-                      {categories.slice(1, 6).map((category, i) => 
-                        <li key={i}>
-                          <div className="type-checkbox">
-                            <input type="checkbox" value={category.id} onClick={e => {checkHandler(e)}} id={`${category.name}-box`} />
-                            <label htmlFor={`${category.name}-box`}>
-                              <span className="checkmark"></span>
-                            </label>
-                            <p className="label-title">{category.name}</p>
-                          </div>
-                        </li>
-                      )}
-                      <li className="show-wrapper">
-                        <ul>
-                          {categories.slice(6, categories.length).map((category, i) =>
-                            <li>
-                              <div className="type-checkbox">
-                                <input type="checkbox" value={category.id} onClick={e => checkHandler(e)} id={`${category.name}-box`} />
-                                <label htmlFor={`${category.name}-box`}>
-                                  <span className="checkmark"></span>
-                                </label>
-                                <p className="label-title">{category.name}</p>
-                              </div>
-                            </li>
-                          )}
-                        </ul>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="limit-price">
-                    <input type="number" id="min" onChange={e => limitPrice(e)} placeholder="min" />
-                    <input type="number" id="max" onChange={e => limitPrice(e)} placeholder="max" />
+                  <div className="pricing">
+                    <div className="filter-title">Pricing</div>
+                    <div className="filter-main">
+                      <input type="number" onChange={e => handlePrice(e.target.value, 'min')} placeholder="min" />
+                      <span>to</span>
+                      <input type="number" onChange={e => handlePrice(e.target.value, 'max')} placeholder="max" />
+                    </div>
                   </div>
                 </div>
-                {products.map((product, i) => 
-                  <CardList image={product.images[0].id} name={product.name} productId={product.id} price={product.price} sold={product.sold} rate={product.rate}/>
-                )}
+                {
+                  loading ? 
+                  SkeletonCard(8) :
+                  products.map((product, i) => 
+                    <CardList image={product.images[0].id} name={product.name} productId={product.id} price={product.price} sold={product.sold} rate={product.rate}/>
+                  )
+                }
               </div>
             </div>
           </div>

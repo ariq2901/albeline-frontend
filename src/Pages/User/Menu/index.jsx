@@ -20,11 +20,6 @@ const Menu = () => {
           &nbsp;
           Wishlist
         </NavLink>
-        <NavLink to="/seller/history" activeClassName="panel__link--active" className="panel__link">
-          <i class="bi bi-bookmark-check"></i>
-          &nbsp;
-          Order History
-        </NavLink>
         <NavLink to="/seller/notification" activeClassName="panel__link--active" className="panel__link">
           <i class="bi bi-bell"></i>
           &nbsp;

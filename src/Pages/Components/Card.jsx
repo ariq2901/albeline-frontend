@@ -5,10 +5,7 @@ import { currencyFormatter, ratingFormatter, soldFormatter } from '../../utils';
 import ImageLoad from './ImageLoad';
 import Placeholder from '../../assets/images/clip-art/placeholder.png';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import HashLoader from 'react-spinners/HashLoader';
-import Axios from 'axios';
-import Swal from 'sweetalert2';
 import { useEffect } from 'react';
 //TODO Tambah Model Card
 
@@ -41,7 +38,7 @@ export const SkeletonCard = (total) => {
 export const Card = ({ image, name, rating, productId, price, sold }) => {
   return (
     <Fragment>
-      <div className="card-p">
+      <Link to={`/detail/${productId}`} className="card-p">
         <div className="card-img">
           <ImageLoad placeholder={Placeholder} src={`${config.api_host}/api/image/${image}`} alt="overlay"/>
         </div>
@@ -52,7 +49,7 @@ export const Card = ({ image, name, rating, productId, price, sold }) => {
             <div className="terjual">{soldFormatter(sold)}</div>
           </div>
         </div>
-      </div>
+      </Link>
     </Fragment>
   );
 }

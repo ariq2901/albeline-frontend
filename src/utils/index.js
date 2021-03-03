@@ -89,7 +89,6 @@ export const ratingFormatter = (rating) => {
           );
         }
       }
-      console.log('starsComponent', starsComponent)
       return (
         starsComponent
       );

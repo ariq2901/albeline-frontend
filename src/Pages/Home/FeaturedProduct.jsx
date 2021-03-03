@@ -2,7 +2,7 @@ import Axios from 'axios';
 import React, { Fragment, useEffect, useState } from 'react';
 import Slider from 'react-slick';
 import { config } from '../../config';
-import { Card2 } from '../Components/Card';
+import { Card2, SkeletonCard } from '../Components/Card';
 import { CustomArrow } from '../Components/SliderCustomized';
 import TallBanner from '../../assets/images/tallBanner.jfif';
 import TallBanner2 from '../../assets/images/tallBanner2.jfif';
@@ -11,6 +11,7 @@ import TallBanner3 from '../../assets/images/tallBanner3.jfif';
 function FeaturedProduct() {
 
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [ud, setUd] = useState(0);
   
   useEffect(() => {
@@ -26,6 +27,7 @@ function FeaturedProduct() {
   
   const GetProducts = async (unmounted, token) => {
     const url = `${config.api_host}/api/products`;
+    setLoading(true);
     try {
       const respons = await Axios.get(url, {cancelToken: token});
       if (!unmounted) {
@@ -34,6 +36,7 @@ function FeaturedProduct() {
     } catch(e) {
       console.error('Fail ', e);
     }
+    setLoading(false);
   }
 
   var settings = {
@@ -44,7 +47,16 @@ function FeaturedProduct() {
     slidesToShow: 4,
     slidesToScroll: 1,
     nextArrow: <CustomArrow prev={false} />,
-    prevArrow: <CustomArrow prev={true}/>
+    prevArrow: <CustomArrow prev={true}/>,
+    initialSlide: 0,
+    responsive: [{
+      breakpoint: 700,
+      settings: {
+        rows: 1,
+        slidesToShow: 2,
+        initialSlide: 2
+      }
+    }]
   };
   
   var settings2 = {
@@ -71,9 +83,12 @@ function FeaturedProduct() {
           </Slider>
           <Slider {...settings} className="rows-slider">
               
-              {products.map((product, i) => 
-                <Card2 key={i} name={product.name} image={product.images[0].id} harga={product.price} />
-              )}
+              {loading ? 
+                SkeletonCard(8) : 
+                products.map((product, i) => 
+                  <Card2 key={i} name={product.name} image={product.images[0].id} harga={product.price} />
+                )
+              }
 
             </Slider>
         </div>

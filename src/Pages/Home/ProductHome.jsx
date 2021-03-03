@@ -130,7 +130,18 @@ const ProductHome = () => {
     slidesToShow: 6,
     slidesToScroll: 1,
     nextArrow: <CustomArrow prev={false} />,
-    prevArrow: <CustomArrow prev={true}/>
+    prevArrow: <CustomArrow prev={true}/>,
+    initialSlide: 0,
+    responsive: [{
+      breakpoint: 700,
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 1,
+        initialSlide: 2,
+        arrows: false,
+        dots: false
+      }
+    }]
   };
 
   return (
