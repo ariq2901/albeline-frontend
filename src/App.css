@@ -1669,7 +1669,7 @@ a > .image-dots {
   position: absolute;
   /* bottom: 1%; */
   width: 30%;
-  height: 100% !important;
+  height: 95% !important;
   display: inline-block !important;
   overflow: hidden;
 }
