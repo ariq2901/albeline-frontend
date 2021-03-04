@@ -4298,7 +4298,6 @@ form#imageform {
 .checkout-grid {
   width: 100%;
   display: grid;
-  height: 200px;
   grid-template-columns: 1.9fr 1fr;
   grid-column-gap: 20px;
   column-gap: 56px;
@@ -4876,7 +4875,7 @@ button.cart-checkout-btn:hover {
 }
 
 .checkout-sect > .container {
-  min-height: 100vh;
+  min-height: 100%;
 }
 
 /*^ Track Section */

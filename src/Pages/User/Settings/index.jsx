@@ -80,21 +80,21 @@ const Settings = () => {
 
   const getCity = async (token, unmounted) => {
     // own Proxy Server
-    const proxUrl = `${config.api_host}/api/cities`;
+    const proxUrl = `${config.rajaongkir_host}/starter/city`;
     try {
       let response = await Axios.get(proxUrl, {
-        // headers: { key: "11fa41eaf62c64584a90b03a759c5296" },
+        headers: { key: "11fa41eaf62c64584a90b03a759c5296" },
         cancelToken: token,
       });
       if (!unmounted) { 
-        var contain = response.data.cities.map((city) => ({
+        var contain = response.data.rajaongkir.results.map((city) => ({
           value: city.city_id,
           label: city.city_name,
           province: city.province,
         }));
         setAllCity(contain);
         
-        var provinsi = response.data.cities.map((city) => ({
+        var provinsi = response.data.rajaongkir.results.map((city) => ({
           label: city.province,
         }));
         

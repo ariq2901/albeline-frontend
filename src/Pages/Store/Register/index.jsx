@@ -19,19 +19,20 @@ export const Register = () => {
 
   const getCity = async (token) => {
     // own Proxy Server
-    const proxUrl = `${config.api_host}/api/cities`;
+    const proxUrl = `${config.rajaongkir_host}/starter/city`;
     try {
       let response = await Axios.get(proxUrl, {
+        headers: { key: "11fa41eaf62c64584a90b03a759c5296" },
         cancelToken: token,
       });
 
-      var contain = response.data.cities.map((result) => ({
+      var contain = response.data.rajaongkir.results.map((result) => ({
         value: result.city_id,
         label: result.city_name,
         province: result.province,
       }));
 
-      var provinsi = response.data.cities.map((result) => ({
+      var provinsi = response.data.rajaongkir.results.map((result) => ({
         label: result.province,
       }));
 

@@ -113,7 +113,7 @@ export const Checkout = () => {
   }
 
   const getCost = async (store, store_address, courier, weight) => {
-    const url = `${config.api_host}/api/cost`;
+    const url = `${config.rajaongkir_host}/starter/cost`;
     const body = {
       origin: store_address,
       destination: cookies.get('user').city_id,
@@ -122,10 +122,11 @@ export const Checkout = () => {
     }
     console.log('body', body);
     try {
-      const response = await Axios.post(url, body)
+      const response = await Axios.post(url, body, {headers: { key: "11fa41eaf62c64584a90b03a759c5296" }})
+      console.log('response', response)
       groupedProducts.map((item) => {
         if (item.store === store) {
-          item.services = response.data.result[0].costs
+          item.services = response.data.rajaongkir.results[0].costs
         }
       })
       setRender(render => render + 1)
@@ -214,7 +215,7 @@ export const Checkout = () => {
   return (
     <Fragment>
       {console.log('groupedProducts', groupedProducts)}
-      <section className="checkout-sect" style={{ height: "200px" }}>
+      <section className="checkout-sect" style={{ minHeight: '110vh', paddingBottom: '50px' }}>
         <div className="container">
           <div className="inner-box">
             <div className="checkout-title"><h4>Checkout</h4></div>

@@ -12,6 +12,7 @@ const ListProduct = () => {
   const [loading, setLoading] = useState(false);
   const [condition, setCondition] = useState('');
   const [filter, setFilter] = useState({});
+  const [render, setRender] = useState(0);
   const [max, setMax] = useState();
   const [min, setMin] = useState();
   let query = useQuery();
@@ -112,7 +113,7 @@ const ListProduct = () => {
       unmounted = true;
       source.cancel("cancelling in cleanup");
     }
-  }, [type, condition, min, max, query.get('category')]);
+  }, [type, render, query.get('category')]);
 
   const activeBtn = {
     background: 'var(--secondary-color)',
@@ -122,7 +123,7 @@ const ListProduct = () => {
   return (
     <Fragment>
       <div className="overlay-popup">
-        <section className="products-sect">
+        <section className="products-sect" style={{ minHeight: '100vh', paddingBottom: '80px' }}>
           <div className="container">
             <div className="products-box">
               <div className="list-header">
@@ -163,6 +164,7 @@ const ListProduct = () => {
                       <input type="number" onChange={e => handlePrice(e.target.value, 'max')} placeholder="max" />
                     </div>
                   </div>
+                  <button style={activeBtn} onClick={() => setRender(render => render + 1)} className="pl-2">Filter</button>
                 </div>
                 {
                   loading ? 

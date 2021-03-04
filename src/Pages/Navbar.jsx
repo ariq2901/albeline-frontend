@@ -112,7 +112,7 @@ const Navbar = () => {
       cookies.remove('user', {path: '/'});
       cookies.remove('user_token', {path: '/'});
       cookies.remove('login', {path: '/'});
-      Swal.fire({icon: 'success', title: 'Success Logout!', text: 'Don\'t forget to come again next time!', allowOutsideClick: false}).then(() => {window.location.replace("https://albeline.vercel.app")});
+      Swal.fire({icon: 'success', title: 'Success Logout!', text: 'Don\'t forget to come again next time!', allowOutsideClick: false}).then(() => {window.location.replace("http://localhost:3000/")});
     } catch (e) {
       console.error(e.message);
       Swal.fire({icon: 'error', title: 'Oops...', text: e.message});
