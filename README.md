@@ -1,4 +1,5 @@
-# Albeline Application ![Logo](https://user-images.githubusercontent.com/48340625/109924443-da388880-7cf2-11eb-91ac-ec79800f5aab.png)
+![Logo](https://user-images.githubusercontent.com/48340625/109924443-da388880-7cf2-11eb-91ac-ec79800f5aab.png)
+# Albeline Application
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
