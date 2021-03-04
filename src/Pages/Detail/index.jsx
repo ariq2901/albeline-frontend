@@ -81,7 +81,7 @@ const Detail = (props) => {
 
   const getCity = async (token) => {
     // own Proxy Server
-    const proxUrl = `${config.api_host}/api/cities`;
+    const proxUrl = `${config.rajaongkir_host}/starter/cities`;
     // const url = 'https://cors-anywhere.herokuapp.com/https://api.rajaongkir.com/starter/city';
     try {
       let response = await Axios.get(proxUrl, {
@@ -91,13 +91,13 @@ const Detail = (props) => {
 
       await new Promise((resolve, reject) => setTimeout(resolve, 3000));
 
-      var contain = response.data.cities.map((result) => ({
+      var contain = response.data.rajaongkir.results.map((result) => ({
         value: result.city_id,
         label: result.city_name,
         province: result.province,
       }));
 
-      var provinsi = response.data.cities.map((result) => ({
+      var provinsi = response.data.rajaongkir.results.map((result) => ({
         label: result.province,
       }));
 
@@ -116,7 +116,7 @@ const Detail = (props) => {
 
   const estOngkir = async () => {
     if (destination) {
-      const url = `${config.api_host}/api/cost`;
+      const url = `${config.rajaongkir_host}/starter/cost`;
       // const headers = {
       //   key: "11fa41eaf62c64584a90b03a759c5296",
       //   "Content-Type": "application/json",
@@ -132,7 +132,7 @@ const Detail = (props) => {
       try {
         let response = await Axios.post(url, body);
         console.log("ONGKIR ", response);
-        setOngkir(response.data.result[0].costs[0].cost[0].value);
+        setOngkir(response.data.rajaongkir.results[0].costs[0].cost[0].value);
       } catch (e) {
         console.error("Failure: " + e);
       }
