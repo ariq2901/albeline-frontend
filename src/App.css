@@ -3287,7 +3287,7 @@ div.auto-container {
   padding: 23px 19px;
   position: absolute;
   height: 100%;
-  min-height: 100vh;
+  min-height: 550px;
   width: 25%;
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
   background-color: #fafafa;
@@ -3297,6 +3297,7 @@ div.auto-container {
   left: 0;
   opacity: 1;
   visibility: visible;
+  z-index: 99999999999999;
   transition: all 1s ease;
 }
 
@@ -3306,6 +3307,18 @@ div.auto-container {
   display: none;
   visibility: hidden;
   transition: all 1s ease;
+}
+
+.filter-btn {
+  margin-top: 20px;
+  width: 100px;
+  height: 32px;
+  font-family: 'Nunito-Regular';
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+  background-color: var(--secondary-color);
 }
 
 label .checkmark {

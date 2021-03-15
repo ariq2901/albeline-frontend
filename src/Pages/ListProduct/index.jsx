@@ -11,7 +11,6 @@ const ListProduct = () => {
   const [filterWindow, setFilterWindow] = useState(false);
   const [loading, setLoading] = useState(false);
   const [condition, setCondition] = useState('');
-  const [filter, setFilter] = useState({});
   const [render, setRender] = useState(0);
   const [max, setMax] = useState();
   const [min, setMin] = useState();
@@ -113,6 +112,7 @@ const ListProduct = () => {
       unmounted = true;
       source.cancel("cancelling in cleanup");
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type, render, query.get('category')]);
 
   const activeBtn = {
@@ -164,7 +164,7 @@ const ListProduct = () => {
                       <input type="number" onChange={e => handlePrice(e.target.value, 'max')} placeholder="max" />
                     </div>
                   </div>
-                  <button style={activeBtn} onClick={() => setRender(render => render + 1)} className="pl-2">Filter</button>
+                  <button onClick={() => setRender(render => render + 1)} className="filter-btn">Filter</button>
                 </div>
                 {
                   loading ? 

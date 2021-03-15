@@ -1,3 +1,9 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable array-callback-return */
+/* eslint-disable no-loop-func */
+/* eslint-disable eqeqeq */
+/* eslint-disable no-unused-vars */
 import { currencyFormatter, inStockFormatter, ratingFormatter, ratingTextFormatter, soldFormatter, } from "../../utils";
 import StarRound from "../../assets/images/clip-art/star-round-icon.svg";
 import Placeholder from '../../assets/images/clip-art/placeholder.png';
@@ -279,6 +285,7 @@ const Detail = (props) => {
           <img
             className="image-dots"
             src={`${config.api_host}/api/image/${imageCount + 1}`}
+            alt="point"
           ></img>
         </a>
       );

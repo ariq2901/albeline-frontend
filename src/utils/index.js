@@ -1,7 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import { useHistory, useLocation } from "react-router-dom";
-import Axios from "axios";
+import { useLocation } from "react-router-dom";
 
 export const currencyFormatter = (duit) => {
   let int = parseInt(duit);
@@ -143,6 +142,7 @@ export const countTotal = (list, key, type = 'item', price_key = 'price', item_a
   var per_item = [];
   let final;
 
+  // eslint-disable-next-line array-callback-return
   list.map((item) => {
     if (type === 'price') {
       let count = (item[`${price_key}`] * item[`${item_amount}`]);
