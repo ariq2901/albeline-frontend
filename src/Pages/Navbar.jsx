@@ -152,10 +152,10 @@ const Navbar = () => {
     }
   }
 
-  const setProduct = product => {
-    setSearch(product);
+  const setProduct = (slug, id) => {
+    setSearch(id);
     history.push({
-      pathname: `/detail/${product}`,
+      pathname: `/detail/${slug}/${id}`,
     })
     setDisplay(false);
   }
@@ -304,7 +304,7 @@ const Navbar = () => {
           <div ref={searchRef} className="auto-container">
             {options.slice(0, 5).map((v, i) =>{
               return (
-                <div onClick={() => setProduct(v.id)} className="auto-option" key={i} tabIndex="0">
+                <div onClick={() => setProduct(v.slug, v.id)} className="auto-option" key={i} tabIndex="0">
                   <div className="icon-option">
                     <img src={`${config.api_host}/api/image/${v.images[0].id}`} alt="img-ico"/>
                   </div>
@@ -342,19 +342,19 @@ const Navbar = () => {
               </div>
               )}
               <div className="search-list">
-                <Link className="search-wrapper" to="/detail/3">
+                <Link className="search-wrapper" to="/detail/ps4-pro-1tb-cuh-7006b-garansi-sony-asia/3">
                   <i className="fas fa-search"></i>
                   <p>Playstation 4</p>
                 </Link>
-                <Link className="search-wrapper" to="/detail/5">
+                <Link className="search-wrapper" to="/detail/iphone-12-pro-max-16128/5">
                   <i className="fas fa-search"></i>
                   <p>Apple Iphone 12</p>
                 </Link>
-                <Link className="search-wrapper" to="/detail/4">
+                <Link className="search-wrapper" to="/detail/adidas-alphabounce-instinc-white/4">
                   <i className="fas fa-search"></i>
                   <p>Adidas Alphabounce</p>
                 </Link>
-                <Link className="search-wrapper" to="/detail/8">
+                <Link className="search-wrapper" to="/detail/konka-oven-listrik-pemanggang-penghangat-makanan/8">
                   <i className="fas fa-search"></i>
                   <p>Oven Konka</p>
                 </Link>
