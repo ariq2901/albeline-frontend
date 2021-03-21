@@ -4,7 +4,42 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Albeline Team
+# Installation
+
+If you want to add this app in your local machine, you can install it with the following instruction below
+
+1. clone this repository
+
+```
+git clone https://github.com/ariq2901/albeline-frontend.git
+```
+
+2. Install `dependencies`
+
+In our case, we are using `npm` for the `package manager`, You can use your preferred `package manager`.
+
+```
+npm install
+```
+
+# Used Technologies
+
+For building this app, we use:
+
+1. Javascript
+2. Node JS
+3. Axios
+4. Universal Cookie
+5. And others.
+
+# Rest API
+
+We are using https://laravel.com
+
+You can look at our backend on :
+https://github.com/ariq2901/albeline-backend.git
+
+# Albeline Team
 
 ### - Ariq Jusuf
 ### - Abdul Aziz
@@ -15,9 +50,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ### - Rizky Aly
 ### - Faris Hafizh
 
-### `npm start`
+---
 
-You can run Albeline app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-Part of Final Project
+[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
+[![forthebadge](https://forthebadge.com/images/badges/powered-by-coffee.svg)](https://forthebadge.com)
+[![forthebadge](https://forthebadge.com/images/badges/made-with-javascript.svg)](https://forthebadge.com)
