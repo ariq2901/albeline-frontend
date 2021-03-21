@@ -28,12 +28,10 @@ export const Checkout = () => {
     let data = groupedProducts;
     let fd = new FormData();
     fd.append('data', JSON.stringify(data));
-    console.log('JSON.stringify(data)', JSON.stringify(data));
 
     setLoading(true);
     try {
       const response = await Axios.post(url, fd, {headers: header});
-      console.log('response order', response);
       setLoading(false);
       dispatch({type: 'CART_RENDER'})
       Swal.fire({icon: 'success', title: 'Success make an order', text: 'Your order has been processed. You will get an invoice on your mailbox'}).then(() => {history.push('/')});
@@ -101,11 +99,7 @@ export const Checkout = () => {
         })
         
         subtotal = per_product.reduce((a, b) => a + b, 0);
-        console.log('subtotal', subtotal)
-        console.log('cost', cost)
-        console.log('subtotal + cost', subtotal + cost)
         item.subtotal = subtotal + cost;
-        console.log('item.subtotal', item.subtotal)
         subtotal = null;
         setRender(render => render + 1)
       }
@@ -113,20 +107,19 @@ export const Checkout = () => {
   }
 
   const getCost = async (store, store_address, courier, weight) => {
-    const url = `${config.rajaongkir_host}/starter/cost`;
+    const url = `${config.api_host}/api/cost`;
     const body = {
       origin: store_address,
       destination: cookies.get('user').city_id,
       weight: weight,
       courier: courier
     }
-    console.log('body', body);
+
     try {
-      const response = await Axios.post(url, body, {headers: { key: "11fa41eaf62c64584a90b03a759c5296" }})
-      console.log('response', response)
+      const response = await Axios.post(url, body);
       groupedProducts.map((item) => {
         if (item.store === store) {
-          item.services = response.data.rajaongkir.results[0].costs
+          item.services = response.data.result[0].costs
         }
       })
       setRender(render => render + 1)
@@ -214,7 +207,6 @@ export const Checkout = () => {
 
   return (
     <Fragment>
-      {console.log('groupedProducts', groupedProducts)}
       <section className="checkout-sect" style={{ minHeight: '110vh', paddingBottom: '50px' }}>
         <div className="container">
           <div className="inner-box">

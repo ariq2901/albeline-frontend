@@ -4,9 +4,10 @@ import Slider from 'react-slick';
 import { config } from '../../config';
 import { Card2, SkeletonCard } from '../Components/Card';
 import { CustomArrow } from '../Components/SliderCustomized';
-import TallBanner from '../../assets/images/tallBanner.jfif';
-import TallBanner2 from '../../assets/images/tallBanner2.jfif';
-import TallBanner3 from '../../assets/images/tallBanner3.jfif';
+import tallbanner from '../../assets/images/banner/tallbanner.png';
+import tallbanner2 from '../../assets/images/banner/tallbanner2.png';
+import tallbanner3 from '../../assets/images/banner/tallbanner3.png';
+import tallbanner4 from '../../assets/images/banner/tallbanner4.png';
 
 function FeaturedProduct() {
 
@@ -77,9 +78,18 @@ function FeaturedProduct() {
         <div className="featured-wrapper">
           
           <Slider {...settings2} className="tall-banner">
-            <img src={TallBanner} alt="banner"/>
-            <img src={TallBanner2} alt="banner"/>
-            <img src={TallBanner3} alt="banner"/>
+            <div className="tallbanner-wrapper tb-one">
+              {/* <img src={tallbanner} alt="banner"/> */}
+            </div>
+            <div className="tallbanner-wrapper tb-two">
+              {/* <img src={tallbanner2} alt="banner"/> */}
+            </div>
+            <div className="tallbanner-wrapper tb-three">
+              {/* <img src={tallbanner3} alt="banner"/> */}
+            </div>
+            <div className="tallbanner-wrapper tb-four">
+              {/* <img src={tallbanner4} alt="banner"/> */}
+            </div>
           </Slider>
           <Slider {...settings} className="rows-slider">
               

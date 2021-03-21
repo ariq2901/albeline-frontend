@@ -1669,9 +1669,8 @@ a > .image-dots {
   position: absolute;
   /* bottom: 1%; */
   width: 30%;
-  height: 95% !important;
+  height: 100% !important;
   display: inline-block !important;
-  overflow: hidden;
 }
 
 .tall-banner img {
@@ -1689,7 +1688,7 @@ a > .image-dots {
 
 .card-f {
   width: 98%;
-  height: 100%;
+  height: 94%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1708,10 +1707,34 @@ a > .image-dots {
   width: 70%;
 }
 
-.cardf-img.test {
-  background-image: url("./assets/images/tallBanner.jfif");
+.tall-banner > .slick-list, .tall-banner > .slick-list > .slick-track, .tall-banner > .slick-list > .slick-track > .slick-slide, .tall-banner > .slick-list > .slick-track > .slick-slide > div {
+  height: 100%;
+}
+
+.tall-banner .tallbanner-wrapper {
+  height: 100%;
   background-size: cover;
-  background-repeat: no-repeat;
+}
+
+.tall-banner .tallbanner-wrapper.tb-one {
+  background-image: url('./assets/images/banner/tallbanner.png');
+}
+
+.tall-banner .tallbanner-wrapper.tb-two {
+  background-image: url('./assets/images/banner/tallbanner2.png');
+}
+
+.tall-banner .tallbanner-wrapper.tb-three {
+  background-image: url('./assets/images/banner/tallbanner3.png');
+}
+
+.tall-banner .tallbanner-wrapper.tb-four {
+  background-image: url('./assets/images/banner/tallbanner4.png');
+}
+
+.featured-wrapper .card-bp .info.loadings {
+ display: none;
+ visibility: hidden;
 }
 
 .cardf-info {
@@ -5449,6 +5472,42 @@ footer.footer {
 .copyright .last-p {
   margin-left: 0.5%;
   font-weight: 300;
+}
+
+.store-header {
+  margin-top: 10px;
+  padding: 10px;
+  width: 100%;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+.store-header .store-logo {
+  width: 90px;
+  height: 90px;
+  overflow: hidden;
+  clip-path: circle();
+}
+
+.store-logo img {
+  width: 100%;
+  transform: scale(1.1);
+}
+
+.store-header-title {
+  font-family: 'Roboto-Bold';
+  color: #3f4548;
+}
+
+.store-owner, .store-total-products {
+  color: #515557;
+}
+
+.ml-5p {
+  margin-left: 5%;
 }
 
 @media screen and (max-width:700px) {

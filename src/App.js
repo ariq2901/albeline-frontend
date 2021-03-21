@@ -17,13 +17,14 @@ import RatingPicker from "./experiment/ratingpicker";
 import Credential from "./Pages/Credentials";
 import { PushNotification } from "./experiment/pushnotification";
 import ListProduct from "./Pages/ListProduct";
-import Register from "./Pages/Store/Register";
-import Seller from "./Pages/Store";
+import Register from "./Pages/Seller/Register";
+import Seller from "./Pages/Seller";
 import AuthGuarder from "./Pages/Guarder/AuthGuarder";
 import NotFound from "./Pages/Components/Notfound";
 import Checkout from "./Pages/Buyer/Checkout";
 import User from "./Pages/User";
 import ResetPassword from "./Pages/Credentials/CallbackResetPassword";
+import Store from "./Pages/Store";
 import Footer from "./Pages/Components/Footer";
 
 function App() {
@@ -40,6 +41,9 @@ function App() {
           </Route>
           <Route path="/detail/:id">
             <Detail />
+          </Route>
+          <Route path="/store/:id">
+            <Store />
           </Route>
           <AuthGuarder path="/user">
             <User />
