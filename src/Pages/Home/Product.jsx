@@ -55,7 +55,7 @@ const Product = () => {
               loading ? SkeletonCard(10) :
               
               product.map((product, i) => 
-                <Card key={i} image={product.images[0].id} name={product.name} rating={product.rate} sold={product.sold} productId={product.id} price={product.price} />
+                <Card key={i} image={product.images[0].id} name={product.name} slug={product.slug} rating={product.rate} sold={product.sold} productId={product.id} price={product.price} />
               )
 
             }

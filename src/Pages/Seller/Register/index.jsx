@@ -24,7 +24,7 @@ export const Register = () => {
       let response = await Axios.get(url, {
         cancelToken: token,
       });
-
+      console.log('respons cities',response);
       var contain = response.data.cities.map((result) => ({
         value: result.city_id,
         label: result.city_name,

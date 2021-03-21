@@ -162,6 +162,7 @@ const ProductHome = () => {
                 product.map((product, i) =>
                   <Card4 
                     name={product.name}
+                    slug={product.slug}
                     image={product.images[0].id}
                     productId={product.id}
                     price={product.price}

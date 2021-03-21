@@ -33,7 +33,7 @@ function usePrevious(value) {
 }
 
 const Detail = (props) => {
-  let { id } = useParams();
+  let { id, slug } = useParams();
   const dispatch = useDispatch();
   const CartReducer = useSelector(state => state.CartReducer);
   const [product, setProduct] = useState([]);
@@ -67,7 +67,7 @@ const Detail = (props) => {
     if (id !== 0) {
       try {
         const response = await Axios.get(
-          `${config.api_host}/api/product/${id}`,
+          `${config.api_host}/api/product/${slug}/id/${id}`,
           { cancelToken: token }
         );
         console.log("response", response);

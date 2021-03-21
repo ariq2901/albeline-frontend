@@ -170,7 +170,7 @@ const ListProduct = () => {
                   loading ? 
                   SkeletonCard(8) :
                   products.map((product, i) => 
-                    <CardList image={product.images[0].id} name={product.name} productId={product.id} price={product.price} sold={product.sold} rate={product.rate}/>
+                    <CardList image={product.images[0].id} name={product.name} slug={product.slug} productId={product.id} price={product.price} sold={product.sold} rate={product.rate}/>
                   )
                 }
               </div>

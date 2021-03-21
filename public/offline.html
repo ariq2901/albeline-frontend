@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="./images/logo.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>You're offline</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+    .container {
+      width: 100vw;
+      height: 100vh;
+      padding-left: 10%;
+      display: grid;
+      align-items: center;
+      justify-content: center;
+      grid-template-columns: 1fr 0.9fr;
+    }
+    .illustration-wrapper {
+      width: 100%;
+    }
+    .illustration-wrapper img {
+      width: 70%;
+    }
+    .text-wrapper {
+      font-family: Helvetica, sans-serif;
+      width: 100%;
+      margin-bottom: 30%;
+    }
+    .text-wrapper p:nth-child(1) {
+      font-size: 3em;
+      font-weight: 700;
+      margin-bottom: 4%;
+    }
+    .text-wrapper p:nth-child(2) {
+      font-size: 20px;
+      margin-bottom: 2%;
+    }
+    .text-wrapper p:nth-child(3) {
+      font-size: 16px;
+      font-weight: 600;
+      color: #5ddd97;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="illustration-wrapper">
+      <img src="images/offline.jpg" alt="offline img" >
+    </div>
+    <div class="text-wrapper">
+      <p>You're Offline</p>
+      <p>You're currently offline, connect to the internet connection to access Skytours' Web</p>
+      <p>- Skytours Team</p>
+    </div>
+  </div>
+</body>
+</html>

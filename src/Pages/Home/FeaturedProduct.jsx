@@ -96,7 +96,7 @@ function FeaturedProduct() {
               {loading ? 
                 SkeletonCard(8) : 
                 products.map((product, i) => 
-                  <Card2 key={i} name={product.name} image={product.images[0].id} harga={product.price} />
+                  <Card2 key={i} name={product.name} slug={product.slug} productId={product.id} image={product.images[0].id} harga={product.price} />
                 )
               }
 

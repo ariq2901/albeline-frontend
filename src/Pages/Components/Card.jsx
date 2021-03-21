@@ -35,10 +35,10 @@ export const SkeletonCard = (total) => {
 }
 
 
-export const Card = ({ image, name, rating, productId, price, sold }) => {
+export const Card = ({ image, name, slug, rating, productId, price, sold }) => {
   return (
     <Fragment>
-      <Link to={`/detail/${productId}`} className="card-p">
+      <Link to={`/detail/${slug}/${productId}`} className="card-p">
         <div className="card-img">
           <ImageLoad placeholder={Placeholder} src={`${config.api_host}/api/image/${image}`} alt="overlay"/>
         </div>
@@ -54,23 +54,23 @@ export const Card = ({ image, name, rating, productId, price, sold }) => {
   );
 }
 
-export const Card2 = ({image, name, productId, harga}) => {
+export const Card2 = ({image, name, slug, productId, harga}) => {
   return (
     <Fragment>
       <div className="card-f">
         <div className="cardf-img">
           <ImageLoad placeholderSrc={Placeholder} src={`${config.api_host}/api/image/${image}`} alt="product"/>
         </div>
-        <div className="cardf-info">
+        <Link to={`detail/${slug}/${productId}`} className="cardf-info" style={{ textDecoration: 'none', color: 'inherit' }}>
           <div className="productf-name">{name}</div>
           <div className="productf-harga">{currencyFormatter(harga)}</div>
-        </div>
+        </Link>
       </div>
     </Fragment>
   );
 }
 
-export const Card4 = ({image, name, productId, price, sold, wishlist, onQuickview, onWishlist, onCart, loading}) => {
+export const Card4 = ({image, name, slug, productId, price, sold, wishlist, onQuickview, onWishlist, onCart, loading}) => {
   return (
     <Fragment>
       <div className="card-bp">
@@ -97,7 +97,7 @@ export const Card4 = ({image, name, productId, price, sold, wishlist, onQuickvie
         <div className="card-bp-img">
           <ImageLoad placeholder={Placeholder} src={`${config.api_host}/api/image/${image}`} alt="pimage"/>
         </div>
-        <NavLink to={`/detail/${productId}`} className="info">
+        <NavLink to={`/detail/${slug}/${productId}`} className="info">
           <div className="product-name-wrapper">
             <span className="product-bp-name">{name}</span>
           </div>
@@ -137,7 +137,7 @@ export const ReviewCard = ({ comment, rate, username, avatar, created_at }) => {
   );
 }
 
-export const CardList = ({image, name, productId, price, sold, rate}) => {
+export const CardList = ({image, name, slug, productId, price, sold, rate}) => {
   return (
     <Fragment>
       <div className="product-card">
@@ -146,7 +146,7 @@ export const CardList = ({image, name, productId, price, sold, rate}) => {
             <ImageLoad src={`${config.api_host}/api/image/${image}`} placeholder={Placeholder} alt="img-card"/>
           </div>
         </div>
-        <Link to={`/detail/${productId}`} className="product-card-info">
+        <Link to={`/detail/${slug}/${productId}`} className="product-card-info">
           <div className="product-card-name">
             <span>{name}</span>
           </div>
