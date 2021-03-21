@@ -1666,7 +1666,6 @@ a > .image-dots {
 }
 
 .tall-banner {
-  position: absolute;
   /* bottom: 1%; */
   width: 30%;
   height: 100% !important;
