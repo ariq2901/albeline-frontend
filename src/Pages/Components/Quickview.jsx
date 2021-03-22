@@ -35,7 +35,7 @@ const Quickview = () => {
 
   async function getProduct(source) {
     if (QReducer.open) {
-      const url = `${config.api_host}/api/product/${QReducer.id}`;
+      const url = `${config.api_host}/api/product/${QReducer.slug}/id/${QReducer.id}`;
       try {
       const response = await Axios.get(url, {cancelToken: source});
       setProduct(response.data.product);

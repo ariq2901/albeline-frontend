@@ -24,6 +24,7 @@ const ProductHome = () => {
   const [clicked, setClicked] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loading2, setLoading2] = useState(false);
+  const [slug, setSlug] = useState('');
   const [productId, setPorductId] = useState(0);
 
   useEffect(() => {
@@ -111,7 +112,7 @@ const ProductHome = () => {
 
   const Quickview = () => {
     if(clicked) {
-      dispatch({type: 'SET_QUICKVIEW', open: true, id: productId});
+      dispatch({type: 'SET_QUICKVIEW', open: true, slug: slug, id: productId});
     }
   }
 
@@ -168,7 +169,7 @@ const ProductHome = () => {
                     price={product.price}
                     sold={product.sold}
                     key={i}
-                    onQuickview={() => {Quickview(product.id); setPorductId(product.id); setClicked(true)}}
+                    onQuickview={() => {setSlug(product.slug); setPorductId(product.id); setClicked(true); Quickview();}}
                     onWishlist={() => setWishlist(!wishlist)}
                     onCart={() => handleCart(product.id)}
                     wishlist={wishlist}

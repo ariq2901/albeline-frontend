@@ -4,6 +4,7 @@ var cookies = new Cookie();
 
 const initialQ = {
   open: false,
+  slug: '',
   id: 0,
 };
 
@@ -13,6 +14,7 @@ const QReducer = (state = initialQ, action) => {
       return {
         ...state,
         open: action.open,
+        slug: action.slug,
         id: action.id,
       };
 
